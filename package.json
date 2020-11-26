@@ -1,0 +1,83 @@
+{
+    "name": "node-7z-archive",
+    "version": "2.1.0",
+    "description": "ESM front-end to 7-Zip, featuring alternative full 7z CLI tool, binaries for Linux, Windows, Mac OSX, and seamlessly create 7zip SFX self extracting archives targeting different platforms.",
+    "type": "module",
+    "main": "lib/index.mjs",
+    "scripts": {
+        "test": "mocha --recursive test/ --timeout=0 --extension mjs",
+        "coverage": "npx nyc@latest --reporter json --reporter text mocha --recursive test/ --timeout=0 --extension mjs && codecov -f coverage/coverage-final.json",
+        "install": "node installer.mjs"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/techno-express/node-7z-archive.git"
+    },
+    "keywords": [
+        "node",
+        "esm",
+        "7z",
+        "7za",
+        "7zr",
+        "p7zip",
+        "7zip",
+        "sfx",
+        "binary",
+        "wrapper",
+        "Mac OS X",
+        "Windows",
+        "Linux",
+        "Apple",
+        "cross-platform"
+    ],
+    "author": "l. stubbs <technoexpressnet@gmail.com>",
+    "contributors": [
+        "HelloGravity",
+        "sketchpunk",
+        "Dannii Willis <curiousdannii@gmail.com>",
+        "redx25 <red.mage25@gmail.com>",
+        "Quentin Rossetti <quentin.rossetti@gmail.com>",
+        "František Gič <frantisek.gic@gmail.com>",
+        "Oskar Larsson Högfeldt <g@oskar-lh.name>"
+    ],
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/techno-express/node-7z-archive/issues"
+    },
+    "homepage": "https://github.com/techno-express/node-7z-archive.git",
+    "files": [
+        "*.mjs",
+        "LICENSE",
+        "README.md",
+        "lib",
+        "util"
+    ],
+  "bin": {
+    "addArchive": "cli.js",
+    "extractArchive": "cli.js",
+    "extractArchiveFull": "cli.js",
+    "deleteArchive": "cli.js",
+    "updateArchive": "cli.js",
+    "addArchive": "cli.js",
+    "addArchive": "cli.js",
+    "fetch": "cli.js"
+  },
+    "engines": {
+        "node": ">=12.0.0"
+    },
+    "dependencies": {
+        "all-unpacker": "^0.1.12",
+        "cross-spawn": "^7.0.3",
+        "fs-extra": "^9.0.1",
+        "macos-release": "^2.4.1",
+        "node-wget-fetch": "^1.0.5",
+        "retrying-promise": "^0.0.4",
+        "system-installer": "^1.1.5",
+        "when": "^3.7.8"
+    },
+    "devDependencies": {
+        "chai": "^4.2.0",
+        "codecov": "^3.8.1",
+        "mocha": "^8.2.1"
+    }
+}
