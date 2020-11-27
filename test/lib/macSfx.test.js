@@ -1,14 +1,16 @@
 /*global describe, it */
 'use strict';
-const expect = require('chai').expect,
-  fs = require('fs-extra'),
-  Zip = require('../../lib'),
-  createSfxMac = Zip.createSfxMac;
+import chai from 'chai';
+import {
+  macSfx
+} from '../lib/index.mjs';
+import fs from 'fs-extra';
+const expect = chai.expect;
 
-describe('Method: `Zip.createSfxMac`', function () {
+describe('Method: `macSfx`', function () {
 
   it('should return successfully on an MacOS Sfx build', function (done) {
-    createSfxMac('test', '*.js', './test/')
+    macSfx('test', '*.js', './test/')
       .then(function (data) {
         expect(data).to.exist;
         expect(fs.existsSync('./test/SfxPackages/test.pkg')).to.be.eql(true);

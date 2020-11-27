@@ -1,6 +1,6 @@
 /*global afterEach */
 'use strict';
-var fs = require('fs-extra');
+import fs from 'fs-extra';
 
 // Remove the `.tmp/` directory after each test.
 afterEach(function () {

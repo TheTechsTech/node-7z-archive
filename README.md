@@ -5,7 +5,7 @@ node-7z-archive
 
 [![Dependencies Status][david-image]][david-url] [![Node.js CI](https://github.com/techno-express/node-7z-archive/workflows/Node.js%20CI/badge.svg)](https://github.com/techno-express/node-7z-archive) [![codecov](https://codecov.io/gh/techno-express/node-7z-archive/branch/master/graph/badge.svg?token=VoVpnT8B7X)](https://codecov.io/gh/techno-express/node-7z-archive) [![Maintainability][codeclimate-image]][codeclimate-url][![Release][npm-image]][npm-url]
 
-> ESM front-end to 7-Zip, featuring alternative full 7z CLI tool, binaries for **Linux**, **Windows**, **Mac OSX**, and seamlessly create 7zip SFX self extracting archives targeting different platforms.
+> ESM front-end to 7-Zip, featuring alternative full 7z CLI tool, binaries for **Linux**, **Windows**, **Mac OSX**, seamlessly create 7zip SFX self extracting archives targeting different platforms.
 
 Usage
 -----
@@ -139,7 +139,7 @@ API
 **import { SevenZip } from 'node-7z-archive';**
 
 *By method name:*
-**import { addArchive, delArchive, extractArchive, fullArchive, listArchive, testArchive, updateArchive } from 'node-7z-archive';**
+**import { createArchive, deleteArchive, extractArchive, fullArchive, listArchive, testArchive, updateArchive } from 'node-7z-archive';**
 
 _____Options:_____ 7-Zip Switches, use without initial `'-'`.
 
@@ -192,10 +192,10 @@ _____Options:_____ 7-Zip Switches, use without initial `'-'`.
   -y : assume Yes on all queries
 ```
 
-### `addArchive`(archive, files, options)
+### `createArchive`(filepath, files, options)
 
 **Arguments**
- * `archive` Path to the archive you want to create.
+ * `filepath` Path to the archive you want to create.
  * `files` The file list to add.
  * `options` An object of options (7-Zip switches).
 
@@ -207,10 +207,10 @@ _____Options:_____ 7-Zip Switches, use without initial `'-'`.
  * `err` An Error object.
 
 
-### `delArchive`(archive, files, options)
+### `deleteArchive`(filepath, files, options)
 
 **Arguments**
- * `archive` Path to the archive you want to delete files from.
+ * `filepath` Path to the archive you want to delete files from.
  * `files` The file list to delete.
  * `options` An object of options (7-Zip switches).
 
@@ -218,10 +218,10 @@ _____Options:_____ 7-Zip Switches, use without initial `'-'`.
  * `err` An Error object.
 
 
-### `extractArchive`(archive, dest, options)
+### `extractArchive`(filepath, dest, options)
 
 **Arguments**
- * `archive` The path to the archive you want to extract.
+ * `filepath` The path to the archive you want to extract.
  * `dest` Where to extract the archive.
  * `options` An object of options.
 
@@ -232,10 +232,10 @@ _____Options:_____ 7-Zip Switches, use without initial `'-'`.
  * `err` An Error object.
 
 
-### `fullArchive`(archive, dest, options)
+### `fullArchive`(filepath, dest, options)
 
 **Arguments**
- * `archive` The path to the archive you want to extract.
+ * `filepath` The path to the archive you want to extract.
  * `dest` Where to extract with full paths, the archive (creates folders for you).
  * `options` An object of options.
 
@@ -247,10 +247,10 @@ _____Options:_____ 7-Zip Switches, use without initial `'-'`.
  * `err` An Error object.
 
 
-### `listArchive`(archive, options)
+### `listArchive`(filepath, options)
 
 **Arguments**
- * `archive` The path to the archive you want to analyze, list contents of archive.
+ * `filepath` The path to the archive you want to analyze, list contents of archive.
  * `options` An object of options.
 
 **Progress**
@@ -267,10 +267,10 @@ _____Options:_____ 7-Zip Switches, use without initial `'-'`.
  * `err` An Error object.
 
 
-### `testArchive`(archive, options)
+### `testArchive`(filepath, options)
 
 **Arguments**
- * `archive` The path to the archive you want to analyze, test integrity of archive.
+ * `filepath` The path to the archive you want to analyze, test integrity of archive.
  * `options` An object of options.
 
 **Progress**
@@ -281,10 +281,10 @@ _____Options:_____ 7-Zip Switches, use without initial `'-'`.
  * `err` An Error object.
 
 
-### `updateArchive`(archive, files, options)
+### `updateArchive`(filepath, files, options)
 
 **Arguments**
- * `archive` Path to the archive you want to update.
+ * `filepath` Path to the archive you want to update.
  * `files` The file list to update.
  * `options` An object of options (7-Zip switches).
 
@@ -303,7 +303,7 @@ Advanced usage
 
 With the `7z` binary compression is made like that:
 
-```bat
+```shell
 # adds *.exe and *.dll files to solid archive archive.7z using LZMA method
 # with 2 MB dictionary and BCJ filter.
 7z a archive.7z *.exe -m0=BCJ -m1=LZMA:d=21
@@ -312,9 +312,9 @@ With the `7z` binary compression is made like that:
 With **node-7z-archive** you can translate it like that:
 
 ```js
-import { addArchive } from 'node-7z-archive';
+import { createArchive } from 'node-7z-archive';
 
-addArchive('archive.7z', '*.exe', {
+createArchive('archive.7z', '*.exe', {
   m0: '=BCJ',
   m1: '=LZMA:d=21'
 })
@@ -323,7 +323,7 @@ addArchive('archive.7z', '*.exe', {
 });
 ```
 
-### Add, delete and update multiple files
+### createArchive, deleteArchive and updateArchive multiple files
 
 When adding, deleting or updating archives you can pass either a string or an
 array as second parameter (the `files` parameter).
@@ -362,8 +362,6 @@ Note that the `r` (for recursive) attribute is passed in this example.
 
 ### Raw inputs
 
-> Thanks to sketchpunk #9 for this one
-
 Sometimes you just want to use the lib as the original command line. For
 instance you want to apply to switches with different values (e.g.:
 `-i!*.jpg -i!*.png` to target only two types of extensions).
@@ -373,9 +371,9 @@ can use the custom `raw` key in your `options` object and pass it an *Array* of
 values.
 
 ```js
-import { list } from 'node-7z-archive';
+import { listArchive } from 'node-7z-archive';
 
-list('archive.zip', {
+listArchive('archive.zip', {
   raw: [ '-i!*.jpg', '-i!*.png' ], // only images
 })
 .progress(function (files) {
@@ -386,7 +384,7 @@ list('archive.zip', {
 });
 ```
 
-> ____This package is a rewrite of [node-7z-forall](https://github.com/techno-express/node-7z-forall)____. The original author has removed the version it was a fork of. The author's current version has over 600 dependency tree without dev. 
+> ____This package is a rewrite of [node-7z-forall](https://github.com/techno-express/node-7z-forall)____. The original author has removed the version it was a fork of [node-7z](https://github.com/quentinrossetti/node-7z). The author's current version has over `600` dependency tree without dev. This here is `144` with dev.
 
 ***
 

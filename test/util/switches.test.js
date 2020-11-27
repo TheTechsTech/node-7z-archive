@@ -1,7 +1,7 @@
 /*global describe, it */
 'use strict';
 import chai from 'chai';
-import switches from '../../util/esm/switches.mjs';
+import switches from '../util/switches.mjs';
 const expect = chai.expect;
 
 describe('Utility: `switches` ESM', function () {
@@ -12,20 +12,26 @@ describe('Utility: `switches` ESM', function () {
   });
 
   it('should return -ssc with flag { ssc: true }', function () {
-    expect(switches({ ssc: true })).to.contain('-ssc');
-    expect(switches({ ssc: true })).to.contain('-y');
+    expect(switches({
+      ssc: true
+    })).to.contain('-ssc');
+    expect(switches({
+      ssc: true
+    })).to.contain('-y');
   });
 
   it('should return -ssc- with flag { ssc: false }', function () {
-    expect(switches({ ssc: false })).to.contain('-ssc-');
+    expect(switches({
+      ssc: false
+    })).to.contain('-ssc-');
   });
 
   it('should return non default booleans when specified', function () {
     var r = switches({
-      so : true,
+      so: true,
       spl: true,
       ssw: true,
-      y  : false
+      y: false
     });
     expect(r).to.contain('-so');
     expect(r).to.contain('-spl');
@@ -36,9 +42,9 @@ describe('Utility: `switches` ESM', function () {
 
   it('should return complex values when needed', function () {
     var r = switches({
-      ssc : true,
-      ssw : true,
-      mx0 : true
+      ssc: true,
+      ssw: true,
+      mx0: true
     });
     expect(r).to.contain('-ssc');
     expect(r).to.contain('-ssw');
@@ -48,12 +54,12 @@ describe('Utility: `switches` ESM', function () {
 
   it('should return complex values with spaces and quotes', function () {
     var r = switches({
-      ssc : true,
-      ssw : true,
-      m0  : '=BCJ',
-      m1  : '=LZMA:d=21',
-      p   : 'My Super Pasw,àù£*',
-      sfx : '7zSD.sfx',
+      ssc: true,
+      ssw: true,
+      m0: '=BCJ',
+      m1: '=LZMA:d=21',
+      p: 'My Super Pasw,àù£*',
+      sfx: '7zSD.sfx',
     });
     expect(r).to.contain('-ssc');
     expect(r).to.contain('-ssw');

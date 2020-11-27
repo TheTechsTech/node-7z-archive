@@ -1,14 +1,16 @@
 /*global describe, it */
 'use strict';
-const expect = require('chai').expect,
-  fs = require('fs-extra'),
-  Zip = require('../../lib'),
-  createSfxLinux = Zip.createSfxLinux;
+import chai from 'chai';
+import {
+  linuxSfx
+} from '../lib/index.mjs';
+import fs from 'fs-extra';
+const expect = chai.expect;
 
-describe('Method: `Zip.createSfxLinux`', function () {
+describe('Method: `linuxSfx`', function () {
 
   it('should return successfully on an Linux Sfx build', function (done) {
-    createSfxLinux('test', '*.js', './test/')
+    linuxSfx('test', '*.js', './test/')
       .then(function (data) {
         expect(data).to.exist;
         expect(fs.existsSync('./test/SfxPackages/test.elf')).to.be.eql(true);

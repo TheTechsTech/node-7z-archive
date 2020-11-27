@@ -10,15 +10,17 @@ import {
   sep
 } from 'path';
 import utilSwitches from './switches.mjs';
-import _7zPath from './path.mjs';
+import binary from './binary.mjs';
 
 /**
- * @promise Run
  * @param {string} command The command to run.
  * @param {Array} switches Options for 7-Zip as an array.
+ * @param {boolean} override should binary directory change?
  * @progress {string} stdout message.
  * @reject {Error} The error issued by 7-Zip.
  * @reject {number} Exit code issued by 7-Zip.
+ *
+ * @returns {Promise} Promise
  */
 export default function (command, switches, override = false) {
   return when.promise(function (fulfill, reject, progress) {
@@ -31,9 +33,9 @@ export default function (command, switches, override = false) {
     }
 
     // add platform binary to command
-    let pathTo7z = _7zPath({}, override);
+    let sevenBinary = binary(override);
     let tmpCmd = command.split(' ')[0];
-    let cmd = join(pathTo7z.path, tmpCmd);
+    let cmd = join(sevenBinary.path, tmpCmd);
     let args = [command.split(' ')[1]];
 
     // Parse and add command (non-switches parameters) to `args`.

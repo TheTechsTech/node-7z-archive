@@ -1,10 +1,10 @@
 /*global describe, it */
 'use strict';
 import chai from 'chai';
-import files from '../../util/esm/files.mjs';
+import files from '../util/files.mjs';
 const expect = chai.expect;
 
-describe('Utility: `files` ESM', function () {
+describe('Utility: `files`', function () {
 
   it('should error on invalid files', function () {
     var r = files();
@@ -17,7 +17,7 @@ describe('Utility: `files` ESM', function () {
   });
 
   it('should works with arrays', function () {
-    var r = files([ 'hello test', 'hello world' ]);
+    var r = files(['hello test', 'hello world']);
     expect(r).to.eql('"hello test" "hello world"');
   });
 
