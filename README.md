@@ -37,11 +37,11 @@ __How to create Sfx - Self Extracting Archives.__
 Executables will be built using 7-zip version _19.00_ on **Windows OS** for Windows targets.
 **Linux** and **Apple macOS** will use 7-zip version _16.04_ for all targets.
 
-- **windowsSfx**(name, files, destination, options, type);
+- **createWindowsSfx**(name, files, destination, options, type);
 
-- **linuxSfx**(name, files, destination, options);
+- **createLinuxSfx**(name, files, destination, options);
 
-- **macSfx**(name, files, destination, options);
+- **createMacSfx**(name, files, destination, options);
 
 Each will in turn call **createSfx**(name, files, destination, options, type, platform, extension) as follows:
 

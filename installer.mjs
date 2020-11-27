@@ -49,34 +49,34 @@ const appleOs = (process.platform == "darwin") ? macos_release.version : '99.99.
   binaryDestination = join(__dirname, 'binaries', process.platform);
 
 const windowsPlatform = {
-  source: join(cwd, '7z1900-extra.7z'),
+  source: join(cwd, '7z1900.exe'),
   destination: join(cwd, 'win32'),
   url: 'https://d.7-zip.org/a/',
-  filename: '7z1900-extra.7z',
+  filename: '7z1900.exe',
   extraName: 'lzma1900.7z',
   extractFolder: '',
   appLocation: '',
-  binaryFiles: ['Far', 'x64', '7za.dll', '7za.exe', '7zxa.dll'],
+  binaryFiles: ['7z.exe', '7z.dll', '7z.sfx', '7zCon.sfx'],
   binaryDestinationDir: join(__dirname, 'binaries', 'win32'),
-  sfxModules: ['7zr.exe', '7zS2.sfx', '7zS2con.sfx', '7zSD.sfx'],
+  sfxModules: ['7zS2.sfx', '7zS2con.sfx', '7zSD.sfx'],
   platform: 'win32',
-  binary: '7za.exe',
+  binary: '7z.exe',
   extraSourceFile: join(cwd, 'win32', 'lzma1900.7z'),
 };
 
 const windowsOtherPlatform = {
-  source: join(cwd, '7z1604-extra.7z'),
+  source: join(cwd, '7z1604.exe'),
   destination: join(cwd, 'other32'),
   url: 'https://d.7-zip.org/a/',
-  filename: '7z1604-extra.7z',
+  filename: '7z1604.exe',
   extraName: 'lzma1604.7z',
   extractFolder: '',
   appLocation: '',
-  binaryFiles: ['Far', 'x64', '7za.dll', '7za.exe', '7zxa.dll'],
+  binaryFiles: ['7z.exe', '7z.dll', '7z.sfx', '7zCon.sfx'],
   binaryDestinationDir: join(__dirname, 'binaries', 'win32', 'other32'),
-  sfxModules: ['7zr.exe', '7zS2.sfx', '7zS2con.sfx', '7zSD.sfx'],
+  sfxModules: ['7zS2.sfx', '7zS2con.sfx', '7zSD.sfx'],
   platform: 'win32',
-  binary: '7za.exe',
+  binary: '7z.exe',
   extraSourceFile: join(cwd, 'other32', 'lzma1604.7z'),
 };
 
@@ -88,11 +88,11 @@ const linuxPlatform = {
   extraName: 'lzma1604.7z',
   extractFolder: 'p7zip_16.02',
   appLocation: 'bin',
-  binaryFiles: ['7z', '7z.so', '7za', '7zCon.sfx', '7zr', 'Codecs'],
+  binaryFiles: ['7z', '7z.so', '7zCon.sfx', 'Codecs'],
   binaryDestinationDir: join(__dirname, 'binaries', 'linux'),
   sfxModules: ['7zS2.sfx', '7zS2con.sfx', '7zSD.sfx'],
   platform: 'linux',
-  binary: '7za',
+  binary: '7z',
   extraSourceFile: join(cwd, 'linux', 'lzma1604.7z'),
 };
 
@@ -105,11 +105,11 @@ const appleMacPlatform = {
   extraName: 'lzma1604.7z',
   extractFolder: '',
   appLocation: 'usr/local/lib/p7zip',
-  binaryFiles: ['7z', '7z.so', '7za', '7zCon.sfx', '7zr', 'Codecs'],
+  binaryFiles: ['7z', '7z.so', '7zCon.sfx', 'Codecs'],
   binaryDestinationDir: join(__dirname, 'binaries', 'darwin'),
   sfxModules: ['7zS2.sfx', '7zS2con.sfx', '7zSD.sfx'],
   platform: 'darwin',
-  binary: '7za',
+  binary: '7z',
   extraSourceFile: join(cwd, 'darwin', 'lzma1604.7z'),
 };
 
@@ -289,8 +289,8 @@ let extractionPromises = [];
             try {
               let from = join(dataFor.destination, dataFor.extractFolder, dataFor.appLocation, file);
               let to = join(dataFor.binaryDestinationDir, file);
-              if (file == '7zCon.sfx') {
-                file = '7zCon' + dataFor.platform + '.sfx';
+              if (file.includes('.sfx')) {
+                file = file.replace(/.sfx/g, dataFor.platform + '.sfx');
                 let location = join(binaryDestination, (process.platform == 'win32' ? 'other32' : ''));
                 to = join(location, file);
                 fs.moveSync(from, to, {
@@ -333,7 +333,7 @@ Promise.all(extractionPromises)
       if (dataFor.sfxModules && dataFor.platform == process.platform) {
         try {
           const directory = (process.platform == "win32") ? dataFor.binaryDestinationDir : binaryDestination;
-          extraUnpack(join(binaryDestination, (process.platform == "win32") ? '7za.exe' : '7za'),
+          extraUnpack(join(binaryDestination, (process.platform == "win32") ? '7z.exe' : '7z'),
             dataFor.extraSourceFile,
             directory,
             dataFor.sfxModules

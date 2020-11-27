@@ -2,7 +2,7 @@
 'use strict';
 import chai from 'chai';
 import {
-  linuxSfx
+  createLinuxSfx
 } from '../lib/index.mjs';
 import fs from 'fs-extra';
 const expect = chai.expect;
@@ -10,7 +10,7 @@ const expect = chai.expect;
 describe('Method: `linuxSfx`', function () {
 
   it('should return successfully on an Linux Sfx build', function (done) {
-    linuxSfx('test', '*.js', './test/')
+    createLinuxSfx('test', '*.js', './test/')
       .then(function (data) {
         expect(data).to.exist;
         expect(fs.existsSync('./test/SfxPackages/test.elf')).to.be.eql(true);
