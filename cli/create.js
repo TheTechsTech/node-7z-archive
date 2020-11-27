@@ -16,13 +16,15 @@ import {
   listArchive,
   testArchive,
   updateArchive
-} from './';
-import {
-  bin,
-  description,
-  version
-} from './package.json';
+} from '../lib/index.mjs';
 import minimist from 'minimist';
+import {
+  createRequire
+} from 'module';
+
+const require = createRequire(
+  import.meta.url);
+const pack = require('../package.json');
 
 /*
  * Arguments.
@@ -32,7 +34,7 @@ let argv = minimist(process.argv.slice(2));
 /*
  * Command.
  */
-var command = Object.keys(bin)[0];
+var command = Object.keys(pack.bin)[0];
 
 /**
  * Help.
@@ -44,22 +46,39 @@ function help() {
     '',
     'Usage: ' + command + ' [filepath] [files] Options...',
     '',
-    description,
+    pack.description,
     '',
     ' [filepath]  - Path to the archive.',
     ' [files]     - Files to add.',
     '',
     'Options:',
     '',
-    '  -h, --help           output usage information',
-    '  -v, --version        output version number',
+    '  -h, --help       output usage information',
+    '  -v, --version    output version number',
     '',
-    '  or any valid 7zip `-` switches',
+    ' Any of these 7zip switches this command accepts:',
     '',
-    'Usage:',
+    '  -i     (Include filenames)',
+    '  -m     (Set compression Method)',
+    '  -p     (Set Password)',
+    '  -r     (Recurse subdirectories)',
+    '  -sdel  (Delete files after compression)',
+    '  -sfx   (Create SFX archive)',
+    '  -si    (read data from stdin)',
+    '  -sni   (Store NT security information)',
+    '  -sns   (Store NTFS alternate Streams)',
+    '  -so    (write data to stdout)',
+    '  -spf   (Use fully qualified file paths)',
+    '  -ssw   (Compress files open for writing)',
+    '  -stl   (Set archive timestamp from the most recently modified file)',
+    '  -t     (set Type of archive)',
+    '  -u     (Update options)',
+    '  -v     (Create Volumes)',
+    '  -w     (set Working directory)',
+    '  -x     (Exclude filenames)',
     '',
-    '# Create/add file to an archive.',
-    '$ ' + command + ' disc/master.7z "*.md help.doc" -r',
+    'Example:',
+    '> ' + command + ' disc/master.7z *.md help.doc -r',
     ''
   ].join('\n  ') + '\n';
 }
@@ -70,21 +89,21 @@ function help() {
 if (argv.help || argv.h) {
   console.log(help());
 } else if (argv.version || argv.v) {
-  console.log(version);
+  console.log(pack.version);
 } else if (argv) {
   let options = {};
   let withoutOptions = argv._;
   let filepath = withoutOptions.shift();
   delete argv._;
-  if (filepath.length > 0) {
+  if (filepath && withoutOptions) {
     options = Object.assign(options, argv)
-    console.log("Creating...");
+    console.log("Creating/adding...");
     createArchive(filepath, withoutOptions, options)
       .progress((info) => {
         console.log(info);
       })
       .then(() => {
-        console.log('The creation of archive ' + filepath + ' is done!');
+        console.log('The creation of archive ' + filepath + ' done!');
       })
       .catch((error) => {
         console.log('--- error:');
