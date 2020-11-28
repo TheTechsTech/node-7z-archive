@@ -56,12 +56,12 @@
     ],
     "bin": {
         "createArchive": "cli/create.js",
+        "deleteArchive": "cli/delete.js",
         "extractArchive": "cli/extract.js",
         "fullArchive": "cli/full.js",
-        "deleteArchive": "cli/delete.js",
-        "updateArchive": "cli/update.js",
         "listArchive": "cli/list.js",
-        "testArchive": "cli/test.js"
+        "testArchive": "cli/test.js",
+        "updateArchive": "cli/update.js"
     },
     "engines": {
         "node": ">=12.0.0"

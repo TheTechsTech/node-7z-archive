@@ -291,7 +291,7 @@ let extractionPromises = [];
               let to = join(dataFor.binaryDestinationDir, file);
               if (file.includes('.sfx')) {
                 file = file.replace(/.sfx/g, dataFor.platform + '.sfx');
-                let location = join(binaryDestination, (process.platform == 'win32' ? 'other32' : ''));
+                let location = join(binaryDestination, (process.platform == 'win32' && !dataFor.source.includes('7z1900.exe') ? 'other32' : ''));
                 to = join(location, file);
                 fs.moveSync(from, to, {
                   overwrite: true
@@ -342,8 +342,7 @@ Promise.all(extractionPromises)
           dataFor.sfxModules.forEach((file) => {
             let name = file.replace(/.sfx/g, (dataFor.destination.includes('win32') ? 'win32' : 'other32') + '.sfx');
             let to = join(directory, name);
-            if (!file.includes('7zr.exe'))
-              fs.renameSync(join(directory, file), to);
+            fs.renameSync(join(directory, file), to);
 
             console.log('Sfx module ' + name + ' copied successfully!');
           });
