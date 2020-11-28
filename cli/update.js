@@ -8,7 +8,7 @@
  * Dependencies.
  */
 import {
-  createArchive
+  updateArchive
 } from '../lib/index.mjs';
 import minimist from 'minimist';
 import {
@@ -27,7 +27,7 @@ let argv = minimist(process.argv.slice(2));
 /*
  * Command.
  */
-var command = Object.keys(pack.bin)[0];
+var command = Object.keys(pack.bin)[6];
 
 /**
  * Help.
@@ -36,13 +36,13 @@ var command = Object.keys(pack.bin)[0];
  */
 function help() {
   return [
-    'Adds files to archive.',
+    'Update older files in the archive and add files that are not already in the archive.',
     'Usage: ' + command + ' [filepath] [files] Options...',
     '',
     pack.description,
     '',
     ' [filepath]  - Path to the archive.',
-    ' [files]     - Files to add.',
+    ' [files]     - Files to update and add.',
     '',
     'Options:',
     '',
@@ -55,7 +55,6 @@ function help() {
     '  -m     (Set compression Method)',
     '  -p     (Set Password)',
     '  -r     (Recurse subdirectories)',
-    '  -sdel  (Delete files after compression)',
     '  -sfx   (Create SFX archive)',
     '  -si    (read data from stdin)',
     '  -sni   (Store NT security information)',
@@ -66,12 +65,11 @@ function help() {
     '  -stl   (Set archive timestamp from the most recently modified file)',
     '  -t     (set Type of archive)',
     '  -u     (Update options)',
-    '  -v     (Create Volumes)',
     '  -w     (set Working directory)',
     '  -x     (Exclude filenames)',
     '',
     'Example:',
-    '> ' + command + ' disc/master.7z *.md help.doc -r',
+    '> ' + command + ' disc/master.7z help.js *.bak -r',
     ''
   ].join('\n  ') + '\n';
 }
@@ -90,13 +88,13 @@ if (argv.help || argv.h) {
   delete argv._;
   if (filepath && files) {
     options = Object.assign(options, argv)
-    console.log("Creating/adding...");
-    createArchive(filepath, files, options)
+    console.log("Updating...");
+    updateArchive(filepath, files, options)
       .progress((info) => {
         console.log(info);
       })
       .then(() => {
-        console.log('Creation of archive ' + filepath + ' done!');
+        console.log('Refresh of files from archive ' + filepath + ' done!');
       })
       .catch((error) => {
         console.log('--- error:');

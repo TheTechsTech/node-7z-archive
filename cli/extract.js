@@ -7,14 +7,8 @@
 /*
  * Dependencies.
  */
-
 import {
-  extractArchive,
-  deleteArchive,
-  fullArchive,
-  listArchive,
-  testArchive,
-  updateArchive
+  extractArchive
 } from '../lib/index.mjs';
 import minimist from 'minimist';
 import {
@@ -33,7 +27,7 @@ let argv = minimist(process.argv.slice(2));
 /*
  * Command.
  */
-var command = Object.keys(pack.bin)[1];
+var command = Object.keys(pack.bin)[2];
 
 /**
  * Help.
@@ -42,13 +36,13 @@ var command = Object.keys(pack.bin)[1];
  */
 function help() {
   return [
-    '',
+    'Extracts files from an archive to the current directory or to the output directory.',
     'Usage: ' + command + ' [filepath] [destination] Options...',
     '',
     pack.description,
     '',
-    ' [filepath]  - Path to the archive.',
-    ' [destination] - Files to add.',
+    ' [filepath]    - Path to the archive.',
+    ' [destination] - Output destination path.',
     '',
     'Options:',
     '',
@@ -91,7 +85,7 @@ if (argv.help || argv.h) {
   let options = {};
   let destination = argv._;
   let filepath = destination.shift();
-  let destination = destination.shift();
+  destination = destination.shift();
   delete argv._;
   if (filepath && destination) {
     options = Object.assign(options, argv)
@@ -101,7 +95,7 @@ if (argv.help || argv.h) {
         console.log(info);
       })
       .then(() => {
-        console.log('Extraction of archive ' + filepath + ' to ' + destination + 'done!');
+        console.log('Extraction of archive ' + filepath + ' to ' + destination + ' done!');
       })
       .catch((error) => {
         console.log('--- error:');

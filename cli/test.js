@@ -8,7 +8,7 @@
  * Dependencies.
  */
 import {
-  createArchive
+  testArchive,
 } from '../lib/index.mjs';
 import minimist from 'minimist';
 import {
@@ -27,7 +27,7 @@ let argv = minimist(process.argv.slice(2));
 /*
  * Command.
  */
-var command = Object.keys(pack.bin)[0];
+var command = Object.keys(pack.bin)[5];
 
 /**
  * Help.
@@ -36,13 +36,12 @@ var command = Object.keys(pack.bin)[0];
  */
 function help() {
   return [
-    'Adds files to archive.',
-    'Usage: ' + command + ' [filepath] [files] Options...',
+    'Tests archive files.',
+    'Usage: ' + command + ' [filepath] Options...',
     '',
     pack.description,
     '',
     ' [filepath]  - Path to the archive.',
-    ' [files]     - Files to add.',
     '',
     'Options:',
     '',
@@ -51,27 +50,17 @@ function help() {
     '',
     ' Any of these 7zip switches this command accepts:',
     '',
+    '  -ai    (Include archive filenames)',
+    '  -an    (Disable parsing of archive_name)',
+    '  -ax    (Exclude archive filenames)',
     '  -i     (Include filenames)',
-    '  -m     (Set compression Method)',
+    '  -sns   (Store NTFS alternate Streams)',
     '  -p     (Set Password)',
     '  -r     (Recurse subdirectories)',
-    '  -sdel  (Delete files after compression)',
-    '  -sfx   (Create SFX archive)',
-    '  -si    (read data from stdin)',
-    '  -sni   (Store NT security information)',
-    '  -sns   (Store NTFS alternate Streams)',
-    '  -so    (write data to stdout)',
-    '  -spf   (Use fully qualified file paths)',
-    '  -ssw   (Compress files open for writing)',
-    '  -stl   (Set archive timestamp from the most recently modified file)',
-    '  -t     (set Type of archive)',
-    '  -u     (Update options)',
-    '  -v     (Create Volumes)',
-    '  -w     (set Working directory)',
     '  -x     (Exclude filenames)',
     '',
     'Example:',
-    '> ' + command + ' disc/master.7z *.md help.doc -r',
+    '> ' + command + ' disc/master.7z -r',
     ''
   ].join('\n  ') + '\n';
 }
@@ -85,18 +74,18 @@ if (argv.help || argv.h) {
   console.log(pack.version);
 } else if (argv) {
   let options = {};
-  let files = argv._;
-  let filepath = files.shift();
+  let filepath = argv._;
+  filepath = filepath.shift();
   delete argv._;
-  if (filepath && files) {
+  if (filepath) {
     options = Object.assign(options, argv)
-    console.log("Creating/adding...");
-    createArchive(filepath, files, options)
+    console.log("Testing...");
+    testArchive(filepath, options)
       .progress((info) => {
         console.log(info);
       })
       .then(() => {
-        console.log('Creation of archive ' + filepath + ' done!');
+        console.log('Integrity of archive ' + filepath + ' done!');
       })
       .catch((error) => {
         console.log('--- error:');

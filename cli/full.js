@@ -8,7 +8,7 @@
  * Dependencies.
  */
 import {
-  createArchive
+  fullArchive,
 } from '../lib/index.mjs';
 import minimist from 'minimist';
 import {
@@ -27,7 +27,7 @@ let argv = minimist(process.argv.slice(2));
 /*
  * Command.
  */
-var command = Object.keys(pack.bin)[0];
+var command = Object.keys(pack.bin)[3];
 
 /**
  * Help.
@@ -36,13 +36,13 @@ var command = Object.keys(pack.bin)[0];
  */
 function help() {
   return [
-    'Adds files to archive.',
-    'Usage: ' + command + ' [filepath] [files] Options...',
+    'Extracts files from an archive with their full paths in the current directory, or in an output directory',
+    'Usage: ' + command + ' [filepath] [destination] Options...',
     '',
     pack.description,
     '',
-    ' [filepath]  - Path to the archive.',
-    ' [files]     - Files to add.',
+    ' [filepath]    - Path to the archive.',
+    ' [destination] - Output destination path.',
     '',
     'Options:',
     '',
@@ -51,27 +51,25 @@ function help() {
     '',
     ' Any of these 7zip switches this command accepts:',
     '',
+    '  -ai    (Include archive filenames)',
+    '  -an    (Disable parsing of archive_name)',
+    '  -ao    (Overwrite mode)',
+    '  -ax    (Exclude archive filenames)',
     '  -i     (Include filenames)',
     '  -m     (Set compression Method)',
     '  -p     (Set Password)',
     '  -r     (Recurse subdirectories)',
-    '  -sdel  (Delete files after compression)',
-    '  -sfx   (Create SFX archive)',
     '  -si    (read data from stdin)',
     '  -sni   (Store NT security information)',
     '  -sns   (Store NTFS alternate Streams)',
     '  -so    (write data to stdout)',
     '  -spf   (Use fully qualified file paths)',
-    '  -ssw   (Compress files open for writing)',
-    '  -stl   (Set archive timestamp from the most recently modified file)',
     '  -t     (set Type of archive)',
-    '  -u     (Update options)',
-    '  -v     (Create Volumes)',
-    '  -w     (set Working directory)',
     '  -x     (Exclude filenames)',
+    '  -y     (assume Yes on all queries)',
     '',
     'Example:',
-    '> ' + command + ' disc/master.7z *.md help.doc -r',
+    '> ' + command + ' disc/master.7z home/ -r -y',
     ''
   ].join('\n  ') + '\n';
 }
@@ -85,18 +83,19 @@ if (argv.help || argv.h) {
   console.log(pack.version);
 } else if (argv) {
   let options = {};
-  let files = argv._;
-  let filepath = files.shift();
+  let destination = argv._;
+  let filepath = destination.shift();
+  destination = destination.shift();
   delete argv._;
-  if (filepath && files) {
+  if (filepath && destination) {
     options = Object.assign(options, argv)
-    console.log("Creating/adding...");
-    createArchive(filepath, files, options)
+    console.log("Extracting Full...");
+    fullArchive(filepath, destination, options)
       .progress((info) => {
         console.log(info);
       })
       .then(() => {
-        console.log('Creation of archive ' + filepath + ' done!');
+        console.log('Extraction of full archive ' + filepath + ' to directory ' + destination + 'done!');
       })
       .catch((error) => {
         console.log('--- error:');
