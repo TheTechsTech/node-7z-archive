@@ -24,7 +24,7 @@ import binary from './binary.mjs';
  *
  * @returns {Promise} Promise
  */
-export default function (command, switches, override = false, useBinary = '7za') {
+export default function (command, switches, override = false, useBinary = '7z') {
   return when.promise(function (fulfill, reject, progress) {
 
     // Parse the command variable. If the command is not a string reject the

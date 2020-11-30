@@ -83,7 +83,7 @@ const windowsOtherPlatform = {
 const linuxPlatform = {
   source: join(cwd, 'p7zip_16.02_x86_linux_bin.tar.bz2'),
   destination: join(cwd, 'linux'),
-  url: 'https://iweb.dl.sourceforge.net/project/p7zip/p7zip/16.02/',
+  url: 'https://pilotfiber.dl.sourceforge.net/project/p7zip/p7zip/16.02/',
   filename: 'p7zip_16.02_x86_linux_bin.tar.bz2',
   extraName: 'lzma1604.7z',
   extractFolder: 'p7zip_16.02',
