@@ -5,7 +5,7 @@
     "type": "module",
     "main": "lib/index.mjs",
     "scripts": {
-        "test": "mocha --recursive test/ --timeout=0 --extension mjs --extension js",
+        "test": "mocha --recursive test/ --timeout=0",
         "coverage": "npx coverage npm test",
         "install": "node installer.mjs"
     },
