@@ -3,7 +3,7 @@ node-7z-archive
 
 [![NPM](https://nodei.co/npm/node-7z-archive.png)](https://nodei.co/npm/node-7z-archive/)
 
-[![Dependencies Status][david-image]][david-url] [![Node.js CI](https://github.com/techno-express/node-7z-archive/workflows/Node.js%20CI/badge.svg)](https://github.com/techno-express/node-7z-archive) [![codecov](https://codecov.io/gh/techno-express/node-7z-archive/branch/master/graph/badge.svg)](https://codecov.io/gh/techno-express/node-7z-archive) [![Maintainability][codeclimate-image]][codeclimate-url][![Release][npm-image]][npm-url]
+[![Dependencies Status][david-image]][david-url] [![Node.js CI](https://github.com/techno-express/node-7z-archive/workflows/Node.js%20CI/badge.svg)](https://github.com/techno-express/node-7z-archive) [![codecov](https://codecov.io/gh/techno-express/node-7z-archive/branch/master/graph/badge.svg?token=WGQxlF48sk)](https://codecov.io/gh/techno-express/node-7z-archive) [![Maintainability][codeclimate-image]][codeclimate-url][![Release][npm-image]][npm-url]
 
 > ESM front-end to 7-Zip, featuring alternative full 7z CLI tool, binaries for **Linux**, **Windows**, **Mac OSX**, seamlessly create 7zip SFX self extracting archives targeting different platforms.
 
@@ -37,80 +37,41 @@ __How to create Sfx - Self Extracting Archives.__
 Executables will be built using 7-zip version _19.00_ on **Windows OS** for Windows targets.
 **Linux** and **Apple macOS** will use 7-zip version _16.04_ for all targets.
 
+import { createWindowsSfx, createLinuxSfx, createMacSfx } from 'node-7z-archive';
+
 - **createWindowsSfx**(name, files, destination, options, type);
 
 - **createLinuxSfx**(name, files, destination, options);
 
 - **createMacSfx**(name, files, destination, options);
 
-Each will in turn call **createSfx**(name, files, destination, options, type, platform, extension) as follows:
+Each will in turn call:
+**createSfx**(name, files, destination, options, type, platform, extension) as:
 
-```js
-import { windowsSfx, linuxSfx, macSfx } from 'node-7z-archive';
+- `name` Application name.
+- `files` Files to add.
+- `destination` Application root for the `SfxPackages` directory, will default to package root.
+  - All Sfx package archives are stored in the **created** `SfxPackages` directory.
+  - The `destination` directory must already exists.
 
-/**
- * Creates self extracting archive, an Installation Package.
- *
- * @param {String} name Application name.
- * @param {Array} files Files to add.
- * @param {String} destination Application root for the `SfxPackages` directory, will default to package root.
- * - All Sfx package archives are stored in the **created** `SfxPackages` directory.
- * - The `destination` directory must already exists.
- * @param {Object} options Object for Installer config and 7-zip switch options.
- *
- * `{`
- *
- * `title:` - Window title message, Default "`name` installation package created on `Current running platform OS`"
- *
- * `beginPrompt:` - Begin Prompt message, Default "Do you want to install `name`?""
- *
- * `installPath:` - "path_to_extract", Sets the extraction path. The extraction folder will not be deleted after the extraction.
- *
- * `progress:` - Value can be "yes" or "no". Default value is "yes".
- *
- * `runProgram:` - Command for executing. Default value is "setup.exe".
- * Substring `% % T` will be replaced with path to temporary folder,
- * where files were extracted
- *
- * `directory:` - Directory prefix for `RunProgram`. Default value is `.\`
- *
- * `executeFile:` Name of file for executing
- *
- * `executeParameters:` Parameters for `ExecuteFile`
- *
- * `}`
- *
- * `NOTE:` There are two ways to run program: `RunProgram` and `ExecuteFile`.
- * - Use `RunProgram`, if you want to run some program from .7z archive.
- * - Use `ExecuteFile`, if you want to open some document from .7z archive or
- * if you want to execute some command from Windows.
- * @param {String} type Application type `gui` or `console`. Default `gui`. Only `console` possible on **Linux** and **Mac** OS.
- * @param {String} platform What platform application targeting? Either `win32`, `darwin`, or `linux`.
- * @param {String} extension Binary extension name.
- *
- * @resolve {String} The created application full path location.
- * @progress {array} Listed files and directories.
- * @reject {Error} The error as issued by 7-Zip.
- *
- * @returns {Promise} Promise
- */
-createSfx(
-  name,
-  files,
-  destination = {PACKAGE_ROOT} + '/SfxPackages',
-  options = {
-      title: 'Windows Title',
-      beginPrompt: 'Begin installation?',
-      progress: 'no',
-      runProgram: 'start',
-      directory: './',
-    ....
-  },
-  type = 'gui',
-  platform = 'win32',
-  extension = '.exe'
-);
-```
+- `options` For installer config file and 7-zip switch options.
+  * `{`
+  * `title:` - Window title message, Default "`name` installation package created on `Current running platform OS`"
+  * `beginPrompt:` - Begin Prompt message, Default "Do you want to install `name`?""
+  * `installPath:` - "path_to_extract", Sets the extraction path. The extraction folder will not be deleted after the extraction.
+  * `progress:` - Value can be "yes" or "no". Default value is "yes".
+  * `runProgram:` - Command for executing. Default value is "setup.exe".
+  * Substring `% % T` will be replaced with path to temporary folder,
+  * where files were extracted
+  * `directory:` - Directory prefix for `RunProgram`. Default value is `.\`
+  * `executeFile:` Name of file for executing
+  * `executeParameters:` Parameters for `ExecuteFile`
+  * `}`
+
+ * `type` Application type `gui` or `console`. Default `gui`. Only `console` possible on **Linux** and **Mac** OS.
+ * `platform` What platform application targeting? Either `win32`, `darwin`, or `linux`.
+ * `extension` Binary extension name.
+
 
 Installation
 ------------
