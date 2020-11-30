@@ -273,8 +273,11 @@ function makeExecutable(binary = [], binaryFolder = '') {
 }
 
 let extractionPromises = [];
-[linuxPlatform, appleMacPlatform, windowsPlatform, windowsOtherPlatform]
-.forEach((dataFor) => {
+let platforms = [linuxPlatform, appleMacPlatform, windowsOtherPlatform];
+if (process.platform == 'win32')
+  platforms = [linuxPlatform, appleMacPlatform, windowsPlatform, windowsOtherPlatform];
+
+platforms.forEach((dataFor) => {
   fs.mkdir(dataFor.destination, (err) => {
     if (err) {}
   });
@@ -296,7 +299,9 @@ let extractionPromises = [];
                 fs.moveSync(from, to, {
                   overwrite: true
                 });
-                makeExecutable([file], location);
+
+                if (dataFor.platform != 'win32')
+                  makeExecutable([file], location);
                 console.log('Sfx module ' + file + ' copied successfully!');
               } else if (dataFor.platform == process.platform) {
                 fs.moveSync(from, to, {
@@ -340,11 +345,7 @@ Promise.all(extractionPromises)
           );
 
           dataFor.sfxModules.forEach((file) => {
-            let name = file.replace(/.sfx/g, (dataFor.destination.includes('win32') ? 'win32' : 'other32') + '.sfx');
-            let to = join(directory, name);
-            fs.renameSync(join(directory, file), to);
-
-            console.log('Sfx module ' + name + ' copied successfully!');
+            console.log('Sfx module ' + file + ' copied successfully!');
           });
         } catch (err) {
           console.error(err);

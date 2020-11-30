@@ -75,7 +75,7 @@ describe('Utility: `run`', function () {
   });
 
   it('should handle error when the command could not be found', function (done) {
-    run('7zxxx a ".tmp/test/archive.7z" "*.exe" "*.dll"', {}, false, '7zxxx').catch(function (err) {
+    run('7zxxx a ".tmp/test/archive.7z" "*.exe" "*.dll"', {}, '7zxxx', false).catch(function (err) {
       expect(err.message).to.contain('ENOENT');
       done();
     });

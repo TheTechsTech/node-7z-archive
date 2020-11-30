@@ -31,7 +31,6 @@ dummy.*
 .c9
 .codio
 *.tgz
-*.7z
 test/.DS_Store
 binaries/.DS_Store
 .DS_Store

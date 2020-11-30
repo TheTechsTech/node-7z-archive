@@ -15,8 +15,8 @@ import binary from './binary.mjs';
 /**
  * @param {string} command The command to run.
  * @param {Array} switches Options for 7-Zip as an array.
- * @param {boolean} override should binary directory change?
  * @param {string} useBinary different binary to use.
+ * @param {boolean} override should binary directory change?
  *
  * @progress {string} stdout message.
  * @reject {Error} The error issued by 7-Zip.
@@ -24,7 +24,7 @@ import binary from './binary.mjs';
  *
  * @returns {Promise} Promise
  */
-export default function (command, switches, override = false, useBinary = '7z') {
+export default function (command, switches, useBinary = '7z', override = false) {
   return when.promise(function (fulfill, reject, progress) {
 
     // Parse the command variable. If the command is not a string reject the
