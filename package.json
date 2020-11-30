@@ -6,7 +6,7 @@
     "main": "lib/index.mjs",
     "scripts": {
         "test": "mocha --recursive test/ --timeout=0",
-        "coverage": "npx coverage mocha --recursive test/",
+        "coverage": "npx coverage npm test",
         "install": "node installer.mjs"
     },
     "repository": {
