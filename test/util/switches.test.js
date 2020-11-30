@@ -1,10 +1,10 @@
 /*global describe, it */
 'use strict';
 import chai from 'chai';
-import switches from '../util/switches.mjs';
+import switches from '../../util/switches.mjs';
 const expect = chai.expect;
 
-describe('Utility: `switches` ESM', function () {
+describe('Utility: `switches`', function () {
 
   it('should return default flags with no args', function () {
     expect(switches({})).to.contain('-ssc');

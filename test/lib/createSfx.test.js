@@ -2,7 +2,7 @@
 'use strict';
 import chai from 'chai';
 import fs from 'fs-extra';
-import createSfx from '../lib/createSfx.mjs';
+import createSfx from '../../lib/createSfx.mjs';
 const expect = chai.expect;
 
 describe('Method: `createSfx`', function () {

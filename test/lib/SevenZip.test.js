@@ -1,9 +1,7 @@
 /*global describe, it */
 'use strict';
 import chai from 'chai';
-import {
-  SevenZip
-} from '../lib/index.mjs';
+import SevenZip from '../../lib/index.mjs';
 const expect = chai.expect;
 
 describe('Class: `SevenZip`', function () {

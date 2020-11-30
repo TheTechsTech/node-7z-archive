@@ -1,7 +1,7 @@
 /*global describe, it */
 'use strict';
 import chai from 'chai';
-import replaceNativeSeparator from '../util/replaceNativeSeparator.mjs';
+import replaceNativeSeparator from '../../util/replaceNativeSeparator.mjs';
 import {
   sep
 } from 'path';

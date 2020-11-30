@@ -1,7 +1,7 @@
 /*global describe, it */
 'use strict';
 import chai from 'chai';
-import files from '../util/files.mjs';
+import files from '../../util/files.mjs';
 const expect = chai.expect;
 
 describe('Utility: `files`', function () {

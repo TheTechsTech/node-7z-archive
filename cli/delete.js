@@ -27,7 +27,7 @@ let argv = minimist(process.argv.slice(2));
 /*
  * Command.
  */
-var command = Object.keys(pack.bin)[1];
+var command = Object.keys(pack.bin)[2];
 
 /**
  * Help.
@@ -37,7 +37,7 @@ var command = Object.keys(pack.bin)[1];
 function help() {
   return [
     'Deletes files from archive.',
-    'Usage: ' + command + ' [filepath] [files] Options...',
+    'Usage: ' + command + ' [filepath] [files] ...Options',
     '',
     pack.description,
     '',
@@ -66,7 +66,7 @@ function help() {
     'Example:',
     '> ' + command + ' disc/master.7z *.bak -r',
     ''
-  ].join('\n  ') + '\n';
+  ].join('\n ') + '\n';
 }
 
 /*

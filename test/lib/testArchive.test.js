@@ -3,7 +3,7 @@
 import chai from 'chai';
 import {
   testArchive
-} from '../lib/index.mjs';
+} from '../../lib/index.mjs';
 const expect = chai.expect;
 
 describe('Method: `testArchive`', function () {

@@ -3,7 +3,7 @@
 import chai from 'chai';
 import {
   createArchive
-} from '../lib/index.mjs';
+} from '../../lib/index.mjs';
 const expect = chai.expect;
 
 describe('Method: `createArchive`', function () {
@@ -35,7 +35,7 @@ describe('Method: `createArchive`', function () {
         });
       })
       .done(function () {
-        expect(store.length).to.be.at.least(4);
+        expect(store.length).to.be.at.least(2);
         done();
       });
   });

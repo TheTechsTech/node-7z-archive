@@ -5,7 +5,7 @@ import fs from 'fs-extra';
 import {
   deleteArchive,
   fullArchive
-} from '../lib/index.mjs';
+} from '../../lib/index.mjs';
 const expect = chai.expect;
 
 describe('Method: `deleteArchive`', function () {

@@ -4,7 +4,7 @@ import chai from 'chai';
 import fs from 'fs-extra';
 import {
   fullArchive
-} from '../lib/index.mjs';
+} from '../../lib/index.mjs';
 const expect = chai.expect;
 
 describe('Method: `fullArchive`', function () {

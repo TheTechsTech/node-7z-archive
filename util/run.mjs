@@ -16,13 +16,15 @@ import binary from './binary.mjs';
  * @param {string} command The command to run.
  * @param {Array} switches Options for 7-Zip as an array.
  * @param {boolean} override should binary directory change?
+ * @param {string} useBinary different binary to use.
+ *
  * @progress {string} stdout message.
  * @reject {Error} The error issued by 7-Zip.
  * @reject {number} Exit code issued by 7-Zip.
  *
  * @returns {Promise} Promise
  */
-export default function (command, switches, override = false) {
+export default function (command, switches, override = false, useBinary = '7z') {
   return when.promise(function (fulfill, reject, progress) {
 
     // Parse the command variable. If the command is not a string reject the
@@ -33,9 +35,8 @@ export default function (command, switches, override = false) {
     }
 
     // add platform binary to command
-    let sevenBinary = binary(override);
-    let tmpCmd = command.split(' ')[0];
-    let cmd = join(sevenBinary.path, tmpCmd);
+    let sevenBinary = binary(override, useBinary);
+    let cmd = sevenBinary.filepath;
     let args = [command.split(' ')[1]];
 
     // Parse and add command (non-switches parameters) to `args`.

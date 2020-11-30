@@ -27,7 +27,7 @@ let argv = minimist(process.argv.slice(2));
 /*
  * Command.
  */
-var command = Object.keys(pack.bin)[7];
+var command = Object.keys(pack.bin)[6];
 
 /**
  * Help.
@@ -37,7 +37,7 @@ var command = Object.keys(pack.bin)[7];
 function help() {
   return [
     'Renames files in archive.',
-    'Usage: ' + command + ' [filepath] [file-pair] Options...',
+    'Usage: ' + command + ' [filepath] [file-pair] ...Options',
     '',
     pack.description,
     '',
@@ -63,7 +63,7 @@ function help() {
     'Example:',
     '> ' + command + ' disc/master.7z docOld.js docNew.mjs -p',
     ''
-  ].join('\n  ') + '\n';
+  ].join('\n ') + '\n';
 }
 
 /*

@@ -1,12 +1,12 @@
 {
     "name": "node-7z-archive",
     "version": "0.9.9",
-    "description": "ESM front-end to 7-Zip, featuring alternative full 7z CLI tool, binaries for Linux, Windows, Mac OSX, seamlessly create 7zip SFX self extracting archives targeting different platforms.",
+    "description": "ESM front-end to 7-Zip, featuring alternative full 7z CLI tools, binaries for Linux, Windows, Mac OSX, seamlessly create 7zip SFX self extracting archives targeting different platforms.",
     "type": "module",
     "main": "lib/index.mjs",
     "scripts": {
-        "test": "mocha --recursive test/ --timeout=0 --extension js",
-        "coverage": "npx nyc@latest --reporter json --reporter text mocha --recursive test/ --timeout=0 --extension js && codecov -f coverage/coverage-final.json",
+        "test": "mocha --recursive test/ --timeout=0 --extension mjs --extension js",
+        "coverage": "npx nyc@latest --reporter=lcov npm test && npx codecov",
         "install": "node installer.mjs"
     },
     "repository": {
@@ -55,11 +55,13 @@
         "cli"
     ],
     "bin": {
+        "7zip": "cli/7zip.js",
         "createArchive": "cli/create.js",
         "deleteArchive": "cli/delete.js",
         "extractArchive": "cli/extract.js",
         "fullArchive": "cli/full.js",
         "listArchive": "cli/list.js",
+        "renameArchive": "cli/update.js",
         "testArchive": "cli/test.js",
         "updateArchive": "cli/update.js"
     },
@@ -79,7 +81,6 @@
     },
     "devDependencies": {
         "chai": "^4.2.0",
-        "codecov": "^3.8.1",
         "mocha": "^8.2.1"
     }
 }

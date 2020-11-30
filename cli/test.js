@@ -27,7 +27,7 @@ let argv = minimist(process.argv.slice(2));
 /*
  * Command.
  */
-var command = Object.keys(pack.bin)[5];
+var command = Object.keys(pack.bin)[7];
 
 /**
  * Help.
@@ -37,7 +37,7 @@ var command = Object.keys(pack.bin)[5];
 function help() {
   return [
     'Tests archive files.',
-    'Usage: ' + command + ' [filepath] Options...',
+    'Usage: ' + command + ' [filepath] ...Options',
     '',
     pack.description,
     '',
@@ -62,7 +62,7 @@ function help() {
     'Example:',
     '> ' + command + ' disc/master.7z -r',
     ''
-  ].join('\n  ') + '\n';
+  ].join('\n ') + '\n';
 }
 
 /*

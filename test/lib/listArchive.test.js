@@ -3,7 +3,7 @@
 import chai from 'chai';
 import {
   listArchive
-} from '../lib/index.mjs';
+} from '../../lib/index.mjs';
 const expect = chai.expect;
 
 
@@ -28,7 +28,7 @@ describe('Method: `listArchive`', function () {
       .then(function () {
         done(error)
       })
-      .done(next);
+      .done();
   });
 
   it('should return an error on 7z error', function (done) {

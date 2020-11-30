@@ -27,7 +27,7 @@ let argv = minimist(process.argv.slice(2));
 /*
  * Command.
  */
-var command = Object.keys(pack.bin)[2];
+var command = Object.keys(pack.bin)[3];
 
 /**
  * Help.
@@ -37,7 +37,7 @@ var command = Object.keys(pack.bin)[2];
 function help() {
   return [
     'Extracts files from an archive to the current directory or to the output directory.',
-    'Usage: ' + command + ' [filepath] [destination] Options...',
+    'Usage: ' + command + ' [filepath] [destination] ...Options',
     '',
     pack.description,
     '',
@@ -71,7 +71,7 @@ function help() {
     'Example:',
     '> ' + command + ' disc/master.7z home/ -r -y',
     ''
-  ].join('\n  ') + '\n';
+  ].join('\n ') + '\n';
 }
 
 /*

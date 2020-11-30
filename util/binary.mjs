@@ -13,9 +13,9 @@ const __filename = fileURLToPath(
   import.meta.url);
 const __dirname = dirname(__filename);
 
-export default function (override = false) {
-  let binaryPath = join(__dirname, '..' + sep + '..', "binaries", (override == true ? process.platform + sep + 'other32' : process.platform));
-  let binaryFilename = (process.platform == "win32") ? '7z.exe' : '7z';
+export default function (override = false, useBinary = '7z') {
+  let binaryPath = join(__dirname, '..', "binaries", (override == true ? process.platform + sep + 'other32' : process.platform));
+  let binaryFilename = (process.platform == "win32") ? useBinary + '.exe' : useBinary;
   return {
     path: binaryPath,
     filename: binaryFilename,

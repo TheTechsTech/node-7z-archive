@@ -4,7 +4,7 @@ import chai from 'chai';
 import fs from 'fs-extra';
 import {
   renameArchive
-} from '../lib/index.mjs';
+} from '../../lib/index.mjs';
 const expect = chai.expect;
 
 describe('Method: `renameArchive`', function () {
@@ -20,8 +20,8 @@ describe('Method: `renameArchive`', function () {
   });
 
   it('should return entries on progress', function (done) {
-    fs.copySync('test/zip.7z', '.tmp/test/update.7z');
-    renameArchive('.tmp/test/update.7z', ['CHANGELOG.md', 'TODO.doc'], {
+    fs.copySync('test/zip.zip', '.tmp/test/update.zip');
+    renameArchive('.tmp/test/update.zip', ['CHANGELOG.md', 'TODO.doc'], {
         w: 'test'
       })
       .progress(function (entries) {
@@ -31,8 +31,8 @@ describe('Method: `renameArchive`', function () {
   });
 
   it('should return on fulfillment', function (done) {
-    fs.copySync('test/zip.7z', '.tmp/test/update.7z');
-    renameArchive('.tmp/test/update.7z', ['CONTRIBUTING.md', 'ISSUES.txt'])
+    fs.copySync('test/zip.zip', '.tmp/test/update.zip');
+    renameArchive('.tmp/test/update.zip', ['./CONTRIBUTING.md', './ISSUES.txt'])
       .then(function () {
         done();
       });

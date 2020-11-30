@@ -27,7 +27,7 @@ let argv = minimist(process.argv.slice(2));
 /*
  * Command.
  */
-var command = Object.keys(pack.bin)[6];
+var command = Object.keys(pack.bin)[8];
 
 /**
  * Help.
@@ -37,7 +37,7 @@ var command = Object.keys(pack.bin)[6];
 function help() {
   return [
     'Update older files in the archive and add files that are not already in the archive.',
-    'Usage: ' + command + ' [filepath] [files] Options...',
+    'Usage: ' + command + ' [filepath] [files] ...Options',
     '',
     pack.description,
     '',
@@ -71,7 +71,7 @@ function help() {
     'Example:',
     '> ' + command + ' disc/master.7z help.js *.bak -r',
     ''
-  ].join('\n  ') + '\n';
+  ].join('\n ') + '\n';
 }
 
 /*

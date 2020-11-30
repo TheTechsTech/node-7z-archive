@@ -3,7 +3,7 @@
 import chai from 'chai';
 import {
   createWindowsSfx
-} from '../lib/index.mjs';
+} from '../../lib/index.mjs';
 import fs from 'fs-extra';
 const expect = chai.expect;
 

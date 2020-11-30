@@ -3,7 +3,7 @@ node-7z-archive
 
 [![NPM](https://nodei.co/npm/node-7z-archive.png)](https://nodei.co/npm/node-7z-archive/)
 
-[![Dependencies Status][david-image]][david-url] [![Node.js CI](https://github.com/techno-express/node-7z-archive/workflows/Node.js%20CI/badge.svg)](https://github.com/techno-express/node-7z-archive) [![codecov](https://codecov.io/gh/techno-express/node-7z-archive/branch/master/graph/badge.svg?token=VoVpnT8B7X)](https://codecov.io/gh/techno-express/node-7z-archive) [![Maintainability][codeclimate-image]][codeclimate-url][![Release][npm-image]][npm-url]
+[![Dependencies Status][david-image]][david-url] [![Node.js CI](https://github.com/techno-express/node-7z-archive/workflows/Node.js%20CI/badge.svg)](https://github.com/techno-express/node-7z-archive) [![codecov](https://codecov.io/gh/techno-express/node-7z-archive/branch/master/graph/badge.svg)](https://codecov.io/gh/techno-express/node-7z-archive) [![Maintainability][codeclimate-image]][codeclimate-url][![Release][npm-image]][npm-url]
 
 > ESM front-end to 7-Zip, featuring alternative full 7z CLI tool, binaries for **Linux**, **Windows**, **Mac OSX**, seamlessly create 7zip SFX self extracting archives targeting different platforms.
 
@@ -124,9 +124,60 @@ The binaries will be downloaded from:
 
 > On Mac OSX - https://rudix.org/
 
-```bash
+```shell
 npm install --save node-7z-archive
 ```
+
+CLI
+---
+
+For using full **7zip** from command line without installation package.
+
+```shell
+npm install -g node-7z-archive
+```
+
+Will have **`createArchive`, `deleteArchive`, `extractArchive`, `fullArchive`, `listArchive`, `renameArchive`, `testArchive`, `updateArchive`** available globally. To always see available commands type:
+
+```shell
+7zip
+```
+
+Outputs:
+
+```md
+Full 7zip Console Commands.
+
+ ESM front-end to 7-Zip, featuring alternative full 7z CLI tools, binaries for Linux, Windows, Mac OSX, seamlessly create 7zip SFX self extracting archives targeting different platforms.
+
+ **Commands**
+
+ Adds files to archive.
+ Usage: `createArchive` archivePath files ...options
+
+ Deletes files from archive.
+ Usage: `deleteArchive` archivePath files ...options
+
+ Extracts files from an archive to the current directory or to the output directory.
+ Usage: `extractArchive` archivePath destination ...options
+
+ Extracts files from an archive with their full paths in the current directory, or in an output directory
+ Usage: `fullArchive` archivePath destination ...options
+
+ Lists contents of archive.
+ Usage: `listArchive` archivePath ...options
+
+ Renames files in archive.
+ Usage: `renameArchive` archivePath file pairs ...options
+
+ Tests archive files.
+ Usage: `testArchive` archivePath ...options
+
+ Update older files in the archive and add files that are not already in the archive.
+ Usage: `updateArchive` archivePath files ...options
+```
+
+> ____This package is a rewrite of [node-7z-forall](https://github.com/techno-express/node-7z-forall)____. The original author has removed the version it was a fork of [node-7z](https://github.com/quentinrossetti/node-7z). The author's current version has over `600` dependency tree without dev. This package dependency is `130` with dev.
 
 API
 ---
@@ -139,7 +190,7 @@ API
 **import { SevenZip } from 'node-7z-archive';**
 
 *By method name:*
-**import { createArchive, deleteArchive, extractArchive, fullArchive, listArchive, testArchive, updateArchive } from 'node-7z-archive';**
+**import { createArchive, deleteArchive, extractArchive, fullArchive, listArchive, renameArchive, testArchive, updateArchive } from 'node-7z-archive';**
 
 _____Options:_____ 7-Zip Switches, use without initial `'-'`.
 
@@ -206,7 +257,6 @@ _____Options:_____ 7-Zip Switches, use without initial `'-'`.
 **Error**
  * `err` An Error object.
 
-
 ### `deleteArchive`(filepath, files, options)
 
 **Arguments**
@@ -216,7 +266,6 @@ _____Options:_____ 7-Zip Switches, use without initial `'-'`.
 
 **Error**
  * `err` An Error object.
-
 
 ### `extractArchive`(filepath, dest, options)
 
@@ -231,7 +280,6 @@ _____Options:_____ 7-Zip Switches, use without initial `'-'`.
 **Error**
  * `err` An Error object.
 
-
 ### `fullArchive`(filepath, dest, options)
 
 **Arguments**
@@ -245,7 +293,6 @@ _____Options:_____ 7-Zip Switches, use without initial `'-'`.
 
 **Error**
  * `err` An Error object.
-
 
 ### `listArchive`(filepath, options)
 
@@ -266,6 +313,18 @@ _____Options:_____ 7-Zip Switches, use without initial `'-'`.
 **Error**
  * `err` An Error object.
 
+### `renameArchive`(filepath, files, options)
+
+**Arguments**
+ * `filepath` The path to the archive that has the file to rename.
+ * `files` The file list in pairs to rename in archive.
+ * `options` An object of options.
+
+**Progress**
+ * `files` A array of files renamed.
+
+**Error**
+ * `err` An Error object.
 
 ### `testArchive`(filepath, options)
 
@@ -279,7 +338,6 @@ _____Options:_____ 7-Zip Switches, use without initial `'-'`.
 
 **Error**
  * `err` An Error object.
-
 
 ### `updateArchive`(filepath, files, options)
 
@@ -325,8 +383,7 @@ createArchive('archive.7z', '*.exe', {
 
 ### createArchive, deleteArchive and updateArchive multiple files
 
-When adding, deleting or updating archives you can pass either a string or an
-array as second parameter (the `files` parameter).
+When adding, deleting or updating archives you can pass either a string or an array as second parameter (the `files` parameter).
 
 ```js
 import { deleteArchive } from 'node-7z-archive';
@@ -384,13 +441,11 @@ listArchive('archive.zip', {
 });
 ```
 
-> ____This package is a rewrite of [node-7z-forall](https://github.com/techno-express/node-7z-forall)____. The original author has removed the version it was a fork of [node-7z](https://github.com/quentinrossetti/node-7z). The author's current version has over `600` dependency tree without dev. This here is `144` with dev.
-
 ***
 
 [david-url]: https://david-dm.org/techno-express/node-7z-archive
 [david-image]: http://img.shields.io/david/techno-express/node-7z-archive.svg
 [codeclimate-url]: https://codeclimate.com/github/techno-express/node-7z-archive/maintainability
-[codeclimate-image]: https://api.codeclimate.com/v1/badges/0d6a0bc69a8ea29c7de9/maintainability
+[codeclimate-image]: https://api.codeclimate.com/v1/badges/28d7f386668a12f3ca84/maintainability
 [npm-url]: https://www.npmjs.org/package/node-7z-archive
 [npm-image]: http://img.shields.io/npm/v/node-7z-archive.svg

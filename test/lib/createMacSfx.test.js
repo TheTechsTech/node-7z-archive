@@ -3,14 +3,14 @@
 import chai from 'chai';
 import {
   createMacSfx
-} from '../lib/index.mjs';
+} from '../../lib/index.mjs';
 import fs from 'fs-extra';
 const expect = chai.expect;
 
-describe('Method: `macSfx`', function () {
+describe('Method: `createMacSfx`', function () {
 
   it('should return successfully on an MacOS Sfx build', function (done) {
-    createMacSfx('test', '*.js', './test/')
+    createMacSfx('test', ['*.js'], './test/')
       .then(function (data) {
         expect(data).to.exist;
         expect(fs.existsSync('./test/SfxPackages/test.pkg')).to.be.eql(true);
