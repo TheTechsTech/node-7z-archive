@@ -17,14 +17,14 @@ describe('Utility: `run`', function () {
   });
 
   it('should return an error on when 7z gets one', function (done) {
-    run('7z "???"').catch(function (err) {
+    run('7z', '', "???").catch(function (err) {
       expect(err.message).to.eql('Unsupported command');
       done();
     });
   });
 
   it('should return an stdout on progress', function (done) {
-    run('7z', {
+    run('7z', '', {
         h: true
       })
       .progress(function (data) {
@@ -36,7 +36,7 @@ describe('Utility: `run`', function () {
   });
 
   it('should correctly parse complex commands', function (done) {
-    run('7z a ".tmp/test/archive.7z" "*.exe" "*.dll"', {
+    run('7z', 'a ".tmp/test/archive.7z" "*.exe" "*.dll"', {
         m0: '=BCJ',
         m1: '=LZMA:d=21'
       })
@@ -54,7 +54,7 @@ describe('Utility: `run`', function () {
   });
 
   it('should correctly parse complex commands with spaces', function (done) {
-    run('7z a ".tmp/Folder A/Folder B\\archive.7z" "*.exe" "*.dll"', {
+    run('7z', 'a ".tmp/Folder A/Folder B\\archive.7z" "*.exe" "*.dll"', {
         m0: '=BCJ',
         m1: '=LZMA:d=21',
         p: 'My mhjls/\\c $^é5°',
@@ -75,7 +75,7 @@ describe('Utility: `run`', function () {
   });
 
   it('should handle error when the command could not be found', function (done) {
-    run('7zxxx a ".tmp/test/archive.7z" "*.exe" "*.dll"', {}, '7zxxx', false).catch(function (err) {
+    run('7zxxx', 'a ".tmp/test/archive.7z" "*.exe" "*.dll"').catch(function (err) {
       expect(err.message).to.contain('ENOENT');
       done();
     });

@@ -6,16 +6,15 @@ import spawn from 'cross-spawn';
 import when from 'when';
 import {
   normalize,
-  join,
   sep
 } from 'path';
 import utilSwitches from './switches.mjs';
-import binary from './binary.mjs';
+import platformBinary from './binary.mjs';
 
 /**
+ * @param {string} binary which binary to use.
  * @param {string} command The command to run.
  * @param {Array} switches Options for 7-Zip as an array.
- * @param {string} useBinary different binary to use.
  * @param {boolean} override should binary directory change?
  *
  * @progress {string} stdout message.
@@ -24,20 +23,20 @@ import binary from './binary.mjs';
  *
  * @returns {Promise} Promise
  */
-export default function (command, switches, useBinary = '7z', override = false) {
+export default function (binary = '7z', command, switches, override = false) {
   return when.promise(function (fulfill, reject, progress) {
 
     // Parse the command variable. If the command is not a string reject the
     // Promise. Otherwise transform the command into two variables: the command
     // name and the arguments.
-    if (typeof command !== 'string') {
-      return reject(new Error('Command must be a string'));
+    if (typeof command !== 'string' || typeof binary !== 'string') {
+      return reject(new Error('Command and Binary must be a string'));
     }
 
     // add platform binary to command
-    let sevenBinary = binary(override, useBinary);
+    let sevenBinary = platformBinary(override, binary);
     let cmd = sevenBinary.filepath;
-    let args = [command.split(' ')[1]];
+    let args = [command.split(' ')[0]];
 
     // Parse and add command (non-switches parameters) to `args`.
     let regexpCommands = /"((?:\\.|[^"\\])*)"/g;
