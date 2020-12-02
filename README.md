@@ -37,13 +37,13 @@ __How to create Sfx - Self Extracting Archives.__
 Executables will be built using 7-zip version _19.00_ on **Windows OS** for Windows targets.
 **Linux** and **Apple macOS** will use 7-zip version _16.04_ for all targets.
 
-import { createWindowsSfx, createLinuxSfx, createMacSfx } from 'node-7z-archive';
+import { createSfxWindows, createSfxLinux, createSfxMac } from 'node-7z-archive';
 
-- **createWindowsSfx**(name, files, destination, options, type);
+- **createSfxWindows**(name, files, destination, options, type);
 
-- **createLinuxSfx**(name, files, destination, options);
+- **createSfxLinux**(name, files, destination, options);
 
-- **createMacSfx**(name, files, destination, options);
+- **createSfxMac**(name, files, destination, options);
 
 Each will in turn call:
 **createSfx**(name, files, destination, options, type, platform, extension) as:
@@ -98,7 +98,7 @@ For using full **7zip** from command line without installation package.
 npm install -g node-7z-archive
 ```
 
-Will have **`createArchive`, `deleteArchive`, `extractArchive`, `fullArchive`, `listArchive`, `renameArchive`, `testArchive`, `updateArchive`** available globally. To always see available commands type:
+Will have **`createArchive`, `deleteArchive`, `extractArchive`, `fullArchive`, `listArchive`, `renameArchive`, `testArchive`, `updateArchive`**, **`createSfx`** available globally. To always see available commands, and binary location type:
 
 ```shell
 7zip
@@ -136,6 +136,12 @@ Full 7zip Console Commands.
 
  Update older files in the archive and add files that are not already in the archive.
  Usage: `updateArchive` archivePath files ...options
+
+ Create an Sfx - self extracting installation package for targeted platform.
+ Usage: `createSfx` platform packageName files -destination ...options
+
+-----------------------------------------------------------------
+ The `7z` and `7za` binary on your system is located in directory: ...\...\node-7z-archive\binaries\...
 ```
 
 > ____This package is a rewrite of [node-7z-forall](https://github.com/techno-express/node-7z-forall)____. The original author has removed the version it was a fork of [node-7z](https://github.com/quentinrossetti/node-7z). The author's current version has over `600` dependency tree without dev. This package dependency is `130` with dev.

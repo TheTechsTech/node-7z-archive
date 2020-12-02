@@ -2,15 +2,15 @@
 'use strict';
 import chai from 'chai';
 import {
-  createLinuxSfx
+  createSfxLinux
 } from '../../lib/index.mjs';
 import fs from 'fs-extra';
 const expect = chai.expect;
 
-describe('Method: `CreateLinuxSfx`', function () {
+describe('Method: `createSfxLinux`', function () {
 
   it('should return successfully on an Linux Sfx build', function (done) {
-    createLinuxSfx('test', ['*.js'], './test/')
+    createSfxLinux('test', ['*.js'], './test/')
       .then(function (data) {
         expect(data).to.exist;
         expect(fs.existsSync('./test/SfxPackages/test.elf')).to.be.eql(true);

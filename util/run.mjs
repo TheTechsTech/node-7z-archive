@@ -23,7 +23,7 @@ import platformBinary from './binary.mjs';
  *
  * @returns {Promise} Promise
  */
-export default function (binary = '7z', command, switches, override = false) {
+export default function (binary = '7z', command = null, switches = {}, override = false) {
   return when.promise(function (fulfill, reject, progress) {
 
     // Parse the command variable. If the command is not a string reject the

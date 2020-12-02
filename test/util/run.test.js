@@ -11,13 +11,13 @@ describe('Utility: `run`', function () {
 
   it('should return an error with invalid command type', function (done) {
     run(0).catch(function (err) {
-      expect(err.message).to.eql('Command must be a string');
+      expect(err.message).to.eql('Command and Binary must be a string');
       done();
     });
   });
 
   it('should return an error on when 7z gets one', function (done) {
-    run('7z', '', "???").catch(function (err) {
+    run('7z', "???").catch(function (err) {
       expect(err.message).to.eql('Unsupported command');
       done();
     });
