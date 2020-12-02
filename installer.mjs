@@ -296,7 +296,7 @@ platforms.forEach((dataFor) => {
                 file = file.replace(/.sfx/g, dataFor.platform + '.sfx');
                 let location = join(binaryDestination, (process.platform == 'win32' && !dataFor.source.includes('7z1900.exe') ? 'other32' : ''));
                 to = join(location, file);
-                fs.moveSync(from, to, {
+                fs.copySync(from, to, {
                   overwrite: true
                 });
 
@@ -304,7 +304,7 @@ platforms.forEach((dataFor) => {
                   makeExecutable([file], location);
                 console.log('Sfx module ' + file + ' copied successfully!');
               } else if (dataFor.platform == process.platform) {
-                fs.moveSync(from, to, {
+                fs.copySync(from, to, {
                   overwrite: true
                 });
 
