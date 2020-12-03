@@ -36,7 +36,7 @@ describe('Utility: `run`', function () {
   });
 
   it('should correctly parse complex commands', function (done) {
-    run('7z', 'a ".tmp/test/archive.7z" "*.exe" "*.dll"', {
+    run('7za', 'a ".tmp/test/archive.7z" "*.exe" "*.dll"', {
         m0: '=BCJ',
         m1: '=LZMA:d=21'
       })
@@ -54,7 +54,7 @@ describe('Utility: `run`', function () {
   });
 
   it('should correctly parse complex commands with spaces', function (done) {
-    run('7z', 'a ".tmp/Folder A/Folder B\\archive.7z" "*.exe" "*.dll"', {
+    run('7za', 'a ".tmp/Folder A/Folder B\\archive.7z" "*.exe" "*.dll"', {
         m0: '=BCJ',
         m1: '=LZMA:d=21',
         p: 'My mhjls/\\c $^é5°',
