@@ -144,7 +144,7 @@ Full 7zip Console Commands.
  The `7z` and `7za` binary on your system is located in directory: ...\...\node-7z-archive\binaries\...
 ```
 
-> ____This package is a rewrite of [node-7z-forall](https://github.com/techno-express/node-7z-forall)____. The original author has removed the version it was a fork of [node-7z](https://github.com/quentinrossetti/node-7z). The author's current version has over `600` dependency tree without dev. This package dependency is `130` with dev.
+> ____This package is a rewrite of [node-7z-forall](https://github.com/techno-express/node-7z-forall)____. The original author has removed the version it was a fork of [node-7z](https://github.com/quentinrossetti/node-7z).
 
 API
 ---
@@ -154,7 +154,9 @@ API
 
 > The type of the list of files can be either *String* or *Array*.
 
-**import { SevenZip } from 'node-7z-archive';**
+**import SevenZip from 'node-7z-archive';**
+
+**const { SevenZip } = require('node-7z-archive');**
 
 *By method name:*
 **import { createArchive, deleteArchive, extractArchive, fullArchive, listArchive, renameArchive, testArchive, updateArchive } from 'node-7z-archive';**
