@@ -17,10 +17,6 @@ jobs:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
         node-version: [12.x, 14.x]
-      include:
-        os: windows-latest
-        continue-on-error: true
-    continue-on-error: ${{ matrix.continue-on-error }}
 
     steps:
     - uses: actions/checkout@v2
