@@ -167,7 +167,7 @@ function platformUnpacker(platformData = windowsPlatform) {
           .then(() => {
             const system = system_installer.packager();
             const toInstall = (system.packager == 'yum' || system.packager == 'dnf') ?
-              'glibc.i686' : 'libc6-i386';
+              'glibc.i686' : ['libc6-i386', 'libc6-udeb'];
             if (process.platform == 'linux')
               system_installer.installer(toInstall).then(() => {
                 return resolve('linux');
