@@ -12,7 +12,7 @@ on:
 jobs:
   build:
     runs-on: ${{ matrix.os }}
-    continue-on-error: windows-latest
+    continue-on-error: [ windows-latest ]
     strategy:
       fail-fast: false
       matrix:
