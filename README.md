@@ -35,7 +35,7 @@ fullArchive('myArchive.7z', 'destination', { p: 'myPassword' } /* 7z options/swi
 __How to create Sfx - Self Extracting Archives.__
 
 Executables will be built using 7-zip version _19.00_ on **Windows OS** for Windows targets.
-**Linux** and **Apple macOS** will use 7-zip version _16.04_ for all targets.
+**Linux** and **Apple macOS** will use 7-zip version _17.02_ for all targets.
 
 import { createSfxWindows, createSfxLinux, createSfxMac } from 'node-7z-archive';
 
@@ -79,11 +79,12 @@ Installation
 This package will download the 7zip binaries at install time. Host system does not need to have 7zip installed or in PATH.
 
 The binaries will be downloaded from:
-> On Linux - https://sourceforge.net/projects/p7zip
+> On Linux - [![Release](https://github.com/techno-express/p7zip/workflows/Release/badge.svg)](https://github.com/techno-express/p7zip/actions/runs/401873413) compiled and available at [releases](https://github.com/techno-express/p7zip/releases/) previously https://sourceforge.net/projects/p7zip which has broken full `7z` version.
 
 > On Windows - https://www.7-zip.org/download.html
 
-> On Mac OSX - https://rudix.org/
+> On Mac OSX - [![Release](https://github.com/techno-express/p7zip/workflows/Release/badge.svg)](https://github.com/techno-express/p7zip/actions/runs/401873413) compiled and available at [releases](https://github.com/techno-express/p7zip/releases/) previously https://rudix.org/ which has broken full `7z` version.
+
 
 ```shell
 npm install --save node-7z-archive
@@ -138,7 +139,7 @@ Full 7zip Console Commands.
  Usage: `updateArchive` archivePath files ...options
 
  Create an Sfx - self extracting installation package for targeted platform.
- Usage: `createSfx` platform packageName files -destination ...options
+ Usage: `createSfx` platform packageName files --dir [save/to] --gui | --console ...options
 
 -----------------------------------------------------------------
  The `7z` and `7za` binary on your system is located in directory: ...\...\node-7z-archive\binaries\...

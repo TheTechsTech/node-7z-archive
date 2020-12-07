@@ -63,7 +63,8 @@
         "extractArchive": "cli/extract.js",
         "fullArchive": "cli/full.js",
         "listArchive": "cli/list.js",
-        "renameArchive": "cli/update.js",
+        "renameArchive": "cli/rename.js",
+        "createSfx": "cli/sfx.js",
         "testArchive": "cli/test.js",
         "updateArchive": "cli/update.js"
     },
@@ -76,7 +77,6 @@
         "fs-extra": "^9.0.1",
         "macos-release": "^2.4.1",
         "node-wget-fetch": "^1.0.5",
-        "retrying-promise": "^0.0.4",
         "system-installer": "^1.1.5",
         "when": "^3.7.8",
         "minimist": "1.2.5"

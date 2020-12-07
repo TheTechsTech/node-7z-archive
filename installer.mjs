@@ -13,7 +13,6 @@ import {
 } from 'path';
 import spawn from 'cross-spawn';
 import unCompress from 'all-unpacker';
-import retryPromise from 'retrying-promise';
 import fetching from 'node-wget-fetch';
 import system_installer from 'system-installer';
 import macos_release from 'macos-release';
@@ -65,11 +64,11 @@ const windowsPlatform = {
 };
 
 const windowsOtherPlatform = {
-  source: join(cwd, '7z1604.exe'),
+  source: join(cwd, '7z1701.exe'),
   destination: join(cwd, 'other32'),
   url: 'https://d.7-zip.org/a/',
-  filename: '7z1604.exe',
-  extraName: '7z1604-extra.7z',
+  filename: '7z1701.exe',
+  extraName: '7z1701-extra.7z',
   extractFolder: '',
   appLocation: '',
   binaryFiles: ['7z.exe', '7z.dll', '7z.sfx', '7zCon.sfx'],
@@ -77,40 +76,49 @@ const windowsOtherPlatform = {
   sfxModules: ['7za.dll', '7za.exe', '7zxa.dll'],
   platform: 'win32',
   binary: '7z.exe',
-  extraSourceFile: join(cwd, 'other32', '7z1604-extra.7z'),
+  extraSourceFile: join(cwd, 'other32', '7z1701-extra.7z'),
 };
 
 const linuxPlatform = {
-  source: join(cwd, 'p7zip_16.02_x86_linux_bin.tar.bz2'),
+  source: join(cwd, 'linux-cmake-p7zip.7z'),
+  // source: join(cwd, 'p7zip_16.02_x86_linux_bin.tar.bz2'),
   destination: join(cwd, 'linux'),
-  url: 'https://pilotfiber.dl.sourceforge.net/project/p7zip/p7zip/16.02/',
-  filename: 'p7zip_16.02_x86_linux_bin.tar.bz2',
-  extraName: 'lzma1604.7z',
-  extractFolder: 'p7zip_16.02',
-  appLocation: 'bin',
-  binaryFiles: ['7z', '7z.so', '7za', '7zCon.sfx', '7zr', 'Codecs'],
+  url: 'https://github.com/techno-express/p7zip/releases/download/17.02/',
+  // url: ' https://pilotfiber.dl.sourceforge.net/project/p7zip/p7zip/16.02/',
+  filename: 'linux-cmake-p7zip.7z',
+  // filename: 'p7zip_16.02_x86_linux_bin.tar.bz2',
+  extraName: 'lzma1701.7z',
+  extractFolder: '',
+  // extractFolder: 'p7zip_16.02',
+  appLocation: '',
+  // appLocation: 'bin',
+  binaryFiles: ['7z_', '7z.so', '7za', '7zCon.sfx', '7zr', 'Codecs'],
   binaryDestinationDir: join(__dirname, 'binaries', 'linux'),
   sfxModules: null,
   platform: 'linux',
   binary: '7z',
-  extraSourceFile: join(cwd, 'linux', 'lzma1604.7z'),
+  extraSourceFile: join(cwd, 'linux', 'lzma1701.7z'),
 };
 
-const macVersion = (macOsVersion == '10.15') ? 'p7zip-16.02-macos10.15.pkg' : 'p7zip-16.02-macos10.11.pkg';
+// const macVersion = (macOsVersion == '10.15') ? 'p7zip-16.02-macos10.15.pkg' : 'p7zip-16.02-macos10.11.pkg';
 const appleMacPlatform = {
-  source: join(cwd, macVersion),
+  source: join(cwd, 'macos-cmake-p7zip.7z'),
+  // source: join(cwd, macVersion),
   destination: join(cwd, 'darwin'),
-  url: 'https://raw.githubusercontent.com/rudix-mac/packages/master/',
-  filename: macVersion,
-  extraName: 'lzma1604.7z',
+  url: 'https://github.com/techno-express/p7zip/releases/download/17.02/',
+  // url: 'https://raw.githubusercontent.com/rudix-mac/packages/master/',
+  filename: 'macos-cmake-p7zip.7z',
+  // filename: macVersion,
+  extraName: 'lzma1701.7z',
   extractFolder: '',
-  appLocation: 'usr/local/lib/p7zip',
-  binaryFiles: ['7z', '7z.so', '7za', '7zCon.sfx', '7zr', 'Codecs'],
+  appLocation: '',
+  // appLocation: 'usr/local/lib/p7zip',
+  binaryFiles: ['7z_', '7z.so', '7za', '7zCon.sfx', '7zr', 'Codecs'],
   binaryDestinationDir: join(__dirname, 'binaries', 'darwin'),
   sfxModules: null,
   platform: 'darwin',
   binary: '7z',
-  extraSourceFile: join(cwd, 'darwin', 'lzma1604.7z'),
+  extraSourceFile: join(cwd, 'darwin', 'lzma1701.7z'),
 };
 
 function retrieve(path = {
@@ -134,7 +142,7 @@ function platformUnpacker(platformData = windowsPlatform) {
       dest: platformData.source
     }).then(() => {
       console.log('Extracting: ' + platformData.filename);
-      if (platformData.platform == 'darwin') {
+      /*if (platformData.platform == 'darwin') {
         let destination = platformData.destination;
         if (process.platform == 'win32') {
           macUnpack(platformData)
@@ -176,7 +184,8 @@ function platformUnpacker(platformData = windowsPlatform) {
               return resolve('linux');
           })
           .catch((err) => retry(err));
-      } else if (fetching.isString(platformData.platform)) {
+      } else */
+      if (fetching.isString(platformData.platform)) {
         unpack(platformData.source, platformData.destination)
           .then(() => {
             return resolve(platformData.platform);
@@ -272,6 +281,84 @@ function makeExecutable(binary = [], binaryFolder = '') {
   });
 }
 
+/**
+ * Returns a promise that conditionally tries to resolve multiple times, as specified by the retry
+ * policy.
+ * @param {retryPolicy} [options] - Either An object that specifies the retry policy.
+ * @param {retryExecutor} executor - A function that is called for each attempt to resolve the promise.
+ * @returns {Promise}
+ *
+ * @see https://github.com/wouter-vdb/retrying-promise
+ */
+function retryPromise(options, executor) {
+  if (executor == undefined) {
+    executor = options;
+    options = {};
+  }
+
+  var opts = prepOpts(options);
+  var attempts = 1;
+
+  return new Promise((resolve, reject) => {
+    let retrying = false;
+
+    function retry(err) {
+      if (retrying) return;
+      retrying = true;
+      if (attempts < opts.retries) {
+        setTimeout(() => {
+          attempts++;
+          retrying = false;
+          executor(resolve, retry, reject, attempts);
+        }, createTimeout(attempts, opts));
+      } else {
+        //console.log(attempts, opts.retries);
+        reject(err);
+      }
+    }
+
+    executor(resolve, retry, reject, attempts);
+  });
+}
+
+/*
+ * Preps the options object, initializing default values and checking constraints.
+ * @param {Object} options - The options as provided to `retryingPromise`.
+ */
+function prepOpts(options) {
+  var opts = {
+    retries: 10,
+    factor: 2,
+    minTimeout: 1000,
+    maxTimeout: Infinity,
+    randomize: false
+  };
+  for (var key in options) {
+    opts[key] = options[key];
+  }
+
+  if (opts.minTimeout > opts.maxTimeout) {
+    throw new Error('minTimeout is greater than maxTimeout');
+  }
+
+  return opts;
+}
+
+/**
+ * Get a timeout value in milliseconds.
+ * @param {number} attempt - The attempt count.
+ * @param {Object} opts - The options.
+ * @returns {number} The timeout value in milliseconds.
+ */
+function createTimeout(attempt, opts) {
+  var random = opts.randomize ? Math.random() + 1 : 1;
+
+  var timeout = Math.round(random * opts.minTimeout * Math.pow(opts.factor, attempt));
+  timeout = Math.min(timeout, opts.maxTimeout);
+
+  return timeout;
+}
+
 let extractionPromises = [];
 let platforms = [linuxPlatform, appleMacPlatform, windowsOtherPlatform];
 if (process.platform == 'win32')
@@ -304,6 +391,7 @@ platforms.forEach((dataFor) => {
                   makeExecutable([file], location);
                 console.log('Sfx module ' + file + ' copied successfully!');
               } else if (dataFor.platform == process.platform) {
+                to = to.replace(/7z_/g, '7z');
                 fs.copySync(from, to, {
                   overwrite: true
                 });

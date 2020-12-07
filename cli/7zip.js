@@ -66,7 +66,7 @@ function help() {
     'Usage: `updateArchive` archivePath files ...options',
     '',
     'Create an Sfx - self extracting installation package for targeted platform.',
-    'Usage: `createSfx` platform packageName files -destination ...options',
+    'Usage: `createSfx` platform packageName files --dir --gui ...options',
     '',
     '----------------------------------------------------------------',
     'The `7z` and `7za` binary on your system is located in directory: ' + sevenBinary.path,
