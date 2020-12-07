@@ -56,14 +56,14 @@ const windowsOtherPlatform = {
 };
 
 const linuxPlatform = {
-  source: join(cwd, 'linux-cmake-p7zip.7z'),
+  source: join(cwd, 'linux-p7zip.7z'),
   destination: join(cwd, 'linux'),
   url: 'https://github.com/techno-express/p7zip/releases/download/17.02/',
-  filename: 'linux-cmake-p7zip.7z',
+  filename: 'linux-p7zip.7z',
   extraName: 'lzma1701.7z',
   extractFolder: '',
   appLocation: '',
-  binaryFiles: ['7z_', '7z.so', '7za', '7zCon.sfx', '7zr', 'Codecs'],
+  binaryFiles: ['7z', '7z.so', '7za', '7zCon.sfx', '7zr', 'Codecs'],
   binaryDestinationDir: join(__dirname, 'binaries', 'linux'),
   sfxModules: null,
   platform: 'linux',
@@ -72,14 +72,14 @@ const linuxPlatform = {
 };
 
 const appleMacPlatform = {
-  source: join(cwd, 'macos-cmake-p7zip.7z'),
+  source: join(cwd, 'macos-p7zip.7z'),
   destination: join(cwd, 'darwin'),
   url: 'https://github.com/techno-express/p7zip/releases/download/17.02/',
-  filename: 'macos-cmake-p7zip.7z',
+  filename: 'macos-p7zip.7z',
   extraName: 'lzma1701.7z',
   extractFolder: '',
   appLocation: '',
-  binaryFiles: ['7z_', '7z.so', '7za', '7zCon.sfx', '7zr', 'Codecs'],
+  binaryFiles: ['7z', '7z.so', '7za', '7zCon.sfx', '7zr', 'Codecs'],
   binaryDestinationDir: join(__dirname, 'binaries', 'darwin'),
   sfxModules: null,
   platform: 'darwin',
