@@ -79,11 +79,11 @@ Installation
 This package will download the 7zip binaries at install time. Host system does not need to have 7zip installed or in PATH.
 
 The binaries will be downloaded from:
-> On Linux - [![Release](https://github.com/techno-express/p7zip/workflows/Release/badge.svg)](https://github.com/techno-express/p7zip/actions/runs/401873413) compiled and available at [releases](https://github.com/techno-express/p7zip/releases/) previously https://sourceforge.net/projects/p7zip which has broken full `7z` version.
+> On Linux - [![Release](https://github.com/techno-express/p7zip/workflows/Release/badge.svg)](https://github.com/techno-express/p7zip/actions/runs/401873413) compiled and available at [releases](https://github.com/techno-express/p7zip/releases/) previously https://sourceforge.net/projects/p7zip.
 
-> On Windows - https://www.7-zip.org/download.html
+> On Windows - https://www.7-zip.org/download.html.
 
-> On Mac OSX - [![Release](https://github.com/techno-express/p7zip/workflows/Release/badge.svg)](https://github.com/techno-express/p7zip/actions/runs/401873413) compiled and available at [releases](https://github.com/techno-express/p7zip/releases/) previously https://rudix.org/ which has broken full `7z` version.
+> On Mac OSX - [![Release](https://github.com/techno-express/p7zip/workflows/Release/badge.svg)](https://github.com/techno-express/p7zip/actions/runs/401873413) compiled and available at [releases](https://github.com/techno-express/p7zip/releases/) previously https://rudix.org/.
 
 
 ```shell

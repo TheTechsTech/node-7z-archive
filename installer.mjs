@@ -163,7 +163,7 @@ function makeExecutable(binary = [], binaryFolder = '') {
     try {
       if (file == 'Codecs')
         file = 'Codecs' + sep + 'Rar.so'
-      fs.chmodSync(join(binaryFolder, file), 755);
+      fs.chmodSync(join(binaryFolder, file), 777);
     } catch (err) {
       console.error(err);
     }
