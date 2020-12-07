@@ -14,36 +14,12 @@ import {
 import spawn from 'cross-spawn';
 import unCompress from 'all-unpacker';
 import fetching from 'node-wget-fetch';
-import system_installer from 'system-installer';
-import macos_release from 'macos-release';
 
 const __filename = fileURLToPath(
   import.meta.url);
 const __dirname = dirname(__filename);
 
-const versionCompare = (left, right) => {
-  if (typeof left + typeof right != 'stringstring')
-    return false;
-
-  let a = left.split('.');
-  let b = right.split('.');
-  let i = 0;
-  let len = Math.max(a.length, b.length);
-
-  for (; i < len; i++) {
-    if ((a[i] && !b[i] && parseInt(a[i]) > 0) || (parseInt(a[i]) > parseInt(b[i]))) {
-      return 1;
-    } else if ((b[i] && !a[i] && parseInt(b[i]) > 0) || (parseInt(a[i]) < parseInt(b[i]))) {
-      return -1;
-    }
-  }
-
-  return 0;
-}
-
-const appleOs = (process.platform == "darwin") ? macos_release.version : '99.99.99',
-  macOsVersion = (versionCompare(appleOs, '10.11.12') == 1) ? '10.15' : '10.11',
-  _7zAppUrl = 'https://7-zip.org/a/',
+const _7zAppUrl = 'https://7-zip.org/a/',
   cwd = process.cwd(),
   binaryDestination = join(__dirname, 'binaries', process.platform);
 
@@ -81,17 +57,12 @@ const windowsOtherPlatform = {
 
 const linuxPlatform = {
   source: join(cwd, 'linux-cmake-p7zip.7z'),
-  // source: join(cwd, 'p7zip_16.02_x86_linux_bin.tar.bz2'),
   destination: join(cwd, 'linux'),
   url: 'https://github.com/techno-express/p7zip/releases/download/17.02/',
-  // url: ' https://pilotfiber.dl.sourceforge.net/project/p7zip/p7zip/16.02/',
   filename: 'linux-cmake-p7zip.7z',
-  // filename: 'p7zip_16.02_x86_linux_bin.tar.bz2',
   extraName: 'lzma1701.7z',
   extractFolder: '',
-  // extractFolder: 'p7zip_16.02',
   appLocation: '',
-  // appLocation: 'bin',
   binaryFiles: ['7z_', '7z.so', '7za', '7zCon.sfx', '7zr', 'Codecs'],
   binaryDestinationDir: join(__dirname, 'binaries', 'linux'),
   sfxModules: null,
@@ -100,19 +71,14 @@ const linuxPlatform = {
   extraSourceFile: join(cwd, 'linux', 'lzma1701.7z'),
 };
 
-// const macVersion = (macOsVersion == '10.15') ? 'p7zip-16.02-macos10.15.pkg' : 'p7zip-16.02-macos10.11.pkg';
 const appleMacPlatform = {
   source: join(cwd, 'macos-cmake-p7zip.7z'),
-  // source: join(cwd, macVersion),
   destination: join(cwd, 'darwin'),
   url: 'https://github.com/techno-express/p7zip/releases/download/17.02/',
-  // url: 'https://raw.githubusercontent.com/rudix-mac/packages/master/',
   filename: 'macos-cmake-p7zip.7z',
-  // filename: macVersion,
   extraName: 'lzma1701.7z',
   extractFolder: '',
   appLocation: '',
-  // appLocation: 'usr/local/lib/p7zip',
   binaryFiles: ['7z_', '7z.so', '7za', '7zCon.sfx', '7zr', 'Codecs'],
   binaryDestinationDir: join(__dirname, 'binaries', 'darwin'),
   sfxModules: null,
@@ -142,49 +108,6 @@ function platformUnpacker(platformData = windowsPlatform) {
       dest: platformData.source
     }).then(() => {
       console.log('Extracting: ' + platformData.filename);
-      /*if (platformData.platform == 'darwin') {
-        let destination = platformData.destination;
-        if (process.platform == 'win32') {
-          macUnpack(platformData)
-            .then(() => {
-              return resolve('darwin');
-            }).catch((err) => retry(err));
-        } else {
-          unpack(platformData.source, destination)
-            .then((data) => {
-              console.log('Decompressing: p7zipinstall.pkg/Payload');
-              unpack(join(destination, 'p7zipinstall.pkg', 'Payload'), destination).then(() => {
-                  console.log('Decompressing: Payload');
-                  unpack(join(destination, 'Payload'), destination, platformData.appLocation + sep + '*').then(() => {
-                      return resolve('darwin');
-                    })
-                    .catch((err) => retry(err));
-                })
-                .catch((err) => retry(err));
-            })
-            .catch((err) => retry(err));
-        }
-      } else if (platformData.platform == 'win32') {
-        unpack(platformData.source, platformData.destination)
-          .then(() => {
-            return resolve('win32');
-          })
-          .catch((err) => retry(err));
-      } else if (platformData.platform == 'linux') {
-        unpack(platformData.source, platformData.destination)
-          .then(() => {
-            const system = system_installer.packager();
-            const toInstall = (system.packager == 'yum' || system.packager == 'dnf') ?
-              'glibc.i686' : 'libc6-i386';
-            if (process.platform == 'linux')
-              system_installer.installer(toInstall).then(() => {
-                return resolve('linux');
-              });
-            else
-              return resolve('linux');
-          })
-          .catch((err) => retry(err));
-      } else */
       if (fetching.isString(platformData.platform)) {
         unpack(platformData.source, platformData.destination)
           .then(() => {
@@ -221,40 +144,6 @@ function extraUnpack(cmd = '', source = '', destination = '', toCopy = []) {
   let extraArgs = args.concat(toCopy).concat(['-r', '-aos']);
   console.log('Running: ' + cmd + ' ' + extraArgs);
   return spawnSync(cmd, extraArgs);
-}
-
-function macUnpack(dataFor = appleMacPlatform, dataForOther = windowsOtherPlatform) {
-  return new Promise((resolve, reject) => {
-    retrieve({
-        url: dataForOther.url + '7z1805-extra.7z',
-        dest: '.' + sep + '7z-extra.7z'
-      })
-      .then(() => {
-        let destination = join(cwd, 'other');
-
-        function extractDone() {
-          fs.emptyDir(destination).then(() => {
-            fs.unlink(join(__dirname, '7z-extra.7z')).then(() => {
-              fs.removeSync(destination);
-              return resolve('darwin');
-            });
-          });
-        };
-
-        unpack(join(__dirname, '7z-extra.7z'), destination)
-          .then(() => {
-            extraUnpack(join(__dirname, 'other', '7za.exe'), dataFor.source, dataFor.destination);
-            console.log('Decompressing: ' + 'p7zip-16.02-macos10.15');
-            unpack(join(dataFor.destination, 'p7zip-16.02-macos10.15'), dataFor.destination)
-              .then(() => {
-                return extractDone();
-              })
-              .catch(() => {
-                return extractDone();
-              });
-          }).catch((err) => reject);
-      }).catch((err) => reject);
-  });
 }
 
 function spawnSync(spCmd = '', spArgs = []) {
@@ -397,7 +286,7 @@ platforms.forEach((dataFor) => {
                 });
 
                 if (dataFor.platform != 'win32')
-                  makeExecutable([file], dataFor.binaryDestinationDir);
+                  makeExecutable([file.replace(/7z_/g, '7z')], dataFor.binaryDestinationDir);
               }
             } catch (err) {
               throw (err);

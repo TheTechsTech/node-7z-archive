@@ -75,9 +75,7 @@
         "all-unpacker": "^0.1.13",
         "cross-spawn": "^7.0.3",
         "fs-extra": "^9.0.1",
-        "macos-release": "^2.4.1",
         "node-wget-fetch": "^1.0.5",
-        "system-installer": "^1.1.5",
         "when": "^3.7.8",
         "minimist": "1.2.5"
     },
