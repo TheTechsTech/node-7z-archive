@@ -1,86 +1,86 @@
 {
-    "name": "node-7z-archive",
-    "version": "0.9.3",
-    "description": "ESM front-end to 7-Zip, featuring alternative full 7z CLI tools, binaries for Linux, Windows, Mac OSX, seamlessly create 7zip SFX self extracting archives targeting different platforms.",
-    "type": "module",
-    "main": "lib/index.mjs",
-    "scripts": {
-        "test": "mocha --recursive test/ --timeout=0",
-        "report": "npx c8 npm test",
-        "coverage": "npx c8 --reporter json npm test && npx codecov -f coverage/coverage-final.json",
-        "install": "node installer.mjs"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/techno-express/node-7z-archive.git"
-    },
-    "keywords": [
-        "node",
-        "esm",
-        "7z",
-        "7za",
-        "7zr",
-        "p7zip",
-        "7zip",
-        "archive",
-        "sfx",
-        "binary",
-        "wrapper",
-        "Mac OS X",
-        "Windows",
-        "Linux",
-        "Apple",
-        "cross-platform"
-    ],
-    "author": "l. stubbs <technoexpressnet@gmail.com>",
-    "contributors": [
-        "HelloGravity",
-        "sketchpunk",
-        "Dannii Willis <curiousdannii@gmail.com>",
-        "redx25 <red.mage25@gmail.com>",
-        "Quentin Rossetti <quentin.rossetti@gmail.com>",
-        "František Gič <frantisek.gic@gmail.com>",
-        "Oskar Larsson Högfeldt <g@oskar-lh.name>"
-    ],
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/techno-express/node-7z-archive/issues"
-    },
-    "homepage": "https://github.com/techno-express/node-7z-archive.git",
-    "files": [
-        "*.js",
-        "*.mjs",
-        "LICENSE",
-        "README.md",
-        "lib",
-        "util",
-        "cli"
-    ],
-    "bin": {
-        "7zip": "cli/7zip.js",
-        "createArchive": "cli/create.js",
-        "deleteArchive": "cli/delete.js",
-        "extractArchive": "cli/extract.js",
-        "fullArchive": "cli/full.js",
-        "listArchive": "cli/list.js",
-        "renameArchive": "cli/rename.js",
-        "createSfx": "cli/sfx.js",
-        "testArchive": "cli/test.js",
-        "updateArchive": "cli/update.js"
-    },
-    "engines": {
-        "node": ">=12.0.0"
-    },
-    "dependencies": {
-        "all-unpacker": "^0.1.13",
-        "cross-spawn": "^7.0.3",
-        "fs-extra": "^9.0.1",
-        "node-wget-fetch": "^1.0.5",
-        "when": "^3.7.8",
-        "minimist": "1.2.5"
-    },
-    "devDependencies": {
-        "chai": "^4.2.0",
-        "mocha": "^8.2.1"
-    }
+  "name": "node-7z-archive",
+  "version": "0.9.9",
+  "description": "ESM front-end to 7-Zip, featuring alternative full 7z CLI tools, binaries for Linux, Windows, Mac OSX, seamlessly create 7zip SFX self extracting archives targeting different platforms.",
+  "type": "module",
+  "main": "lib/index.mjs",
+  "scripts": {
+    "test": "mocha --recursive test/ --timeout=0",
+    "report": "npx c8 npm test",
+    "coverage": "npx c8 --reporter json npm test && npx codecov -f coverage/coverage-final.json",
+    "install": "node installer.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/techno-express/node-7z-archive.git"
+  },
+  "keywords": [
+    "node",
+    "esm",
+    "7z",
+    "7za",
+    "7zr",
+    "p7zip",
+    "7zip",
+    "archive",
+    "sfx",
+    "binary",
+    "wrapper",
+    "Mac OS X",
+    "Windows",
+    "Linux",
+    "Apple",
+    "cross-platform"
+  ],
+  "author": "l. stubbs <technoexpressnet@gmail.com>",
+  "contributors": [
+    "HelloGravity",
+    "sketchpunk",
+    "Dannii Willis <curiousdannii@gmail.com>",
+    "redx25 <red.mage25@gmail.com>",
+    "Quentin Rossetti <quentin.rossetti@gmail.com>",
+    "František Gič <frantisek.gic@gmail.com>",
+    "Oskar Larsson Högfeldt <g@oskar-lh.name>"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/techno-express/node-7z-archive/issues"
+  },
+  "homepage": "https://github.com/techno-express/node-7z-archive.git",
+  "files": [
+    "*.js",
+    "*.mjs",
+    "LICENSE",
+    "README.md",
+    "lib",
+    "util",
+    "cli"
+  ],
+  "bin": {
+    "7zip": "cli/7zip.js",
+    "createArchive": "cli/create.js",
+    "deleteArchive": "cli/delete.js",
+    "extractArchive": "cli/extract.js",
+    "fullArchive": "cli/full.js",
+    "listArchive": "cli/list.js",
+    "renameArchive": "cli/rename.js",
+    "createSfx": "cli/sfx.js",
+    "testArchive": "cli/test.js",
+    "updateArchive": "cli/update.js"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "dependencies": {
+    "node-unar": "^1.0.1",
+    "cross-spawn": "^7.0.3",
+    "fs-extra": "^9.0.1",
+    "node-wget-fetch": "^1.1.0",
+    "when": "^3.7.8",
+    "minimist": "1.2.5"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^8.2.1"
+  }
 }
