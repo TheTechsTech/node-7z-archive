@@ -2,7 +2,7 @@
 import {
   EOL
 } from 'os';
-import spawn from 'cross-spawn';
+import { spawn } from 'child_process';
 import when from 'when';
 import {
   normalize,

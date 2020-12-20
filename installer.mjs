@@ -11,7 +11,7 @@ import {
   join,
   sep,
 } from 'path';
-import spawn from 'cross-spawn';
+import { spawnSync } from 'child_process';
 import { unpack } from 'node-unar';
 import { wget, isString } from 'node-wget-fetch';
 
@@ -125,11 +125,7 @@ function extraUnpack(cmd = '', source = '', destination = '', toCopy = []) {
   let args = ['e', source, '-o' + destination];
   let extraArgs = args.concat(toCopy).concat(['-r', '-aos']);
   console.log('Running: ' + cmd + ' ' + extraArgs);
-  return spawnSync(cmd, extraArgs);
-}
-
-function spawnSync(spCmd = '', spArgs = []) {
-  let doUnpack = spawn.sync(spCmd, spArgs, {
+  let doUnpack = spawnSync(cmd, extraArgs, {
     stdio: 'pipe'
   });
   if (doUnpack.error) {
