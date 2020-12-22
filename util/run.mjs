@@ -2,7 +2,7 @@
 import {
   EOL
 } from 'os';
-import { spawn } from 'child_process';
+import { spawning } from 'node-sys';
 import when from 'when';
 import {
   normalize,
@@ -92,34 +92,38 @@ export default function (binary = '7z', command = null, switches = {}, override 
     // error's message. Otherwise progress with stdout message.
     let err;
     let reg = new RegExp('Error:(' + EOL + '|)?(.*)', 'i');
+    let onprogress = (object) => {
+      progress(object.output);
+      return args;
+    };
+
+    let onerror = (data) => {
+      let res = reg.exec(data);
+      if (res) {
+        err = new Error(res[2].substr(0, res[2].length - 1));
+        return err;
+      }
+    };
+
     let res = {
       cmd: cmd,
       args: args,
       options: {
-        stdio: 'pipe'
+        stdio: 'pipe',
+        onprogress: onprogress,
+        onerror: onerror
       }
     };
 
-    //console.log('>> ', res.cmd, res.args.join(' '), res.options,' <<');
-    let run = spawn(res.cmd, res.args, res.options);
-    run.stderr.on('data', function (data) {
-      let res = reg.exec(data.toString());
-      if (res) {
-        err = new Error(res[2].substr(0, res[2].length - 1));
-      }
-    });
-    run.stdout.on('data', function (data) {
-      return progress(data.toString());
-    });
-    run.on('error', function (err) {
-      reject(err);
-    });
-    run.on('close', function (code) {
-      if (code === 0) {
-        return fulfill(args);
-      }
-      return reject(err, code);
-    });
+    spawning(res.cmd, res.args, res.options)
+      .then((data) => {
+        if (data === args)
+          return fulfill(args);
 
+        return reject(err);
+      })
+      .catch((err) => {
+        return reject(err);
+      });
   });
 };
