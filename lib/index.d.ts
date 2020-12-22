@@ -11,7 +11,6 @@ export = SevenZip;
  * @param filepath {string} Path to the archive.
  * @param files {string|array} Files to add.
  * @param options {Object} An object of acceptable 7-zip switch options.
- * @param useBinary {string} binary to use.
  * @param override {boolean} should binary directory change?
  *
  * @resolve {array} Arguments passed to the child-process.
@@ -28,7 +27,6 @@ export function createArchive(filepath: string, files: string | array, options?:
  * @param filepath {string} Path to the archive.
  * @param files {string|array} Files to remove.
  * @param options {Object} An object of acceptable 7-zip switch options.
- * @param useBinary {string} binary to use.
  * @param override {boolean} should binary directory change?
  *
  * @resolve {array} Arguments passed to the child-process.
@@ -36,21 +34,14 @@ export function createArchive(filepath: string, files: string | array, options?:
  *
  * @returns {Promise} Promise
  */
-export function deleteArchive(
-  filepath: string,
-  files: string | array,
-  options?: object,
-  useBinary?: string,
-  override?: boolean
-): Promise<any>;
+export function deleteArchive(filepath: string, files: string | array, options?: object, override?: boolean): Promise<any>;
 
 /**
  * Extract an archive.
  *
- * @param {string} archive Path to the archive.
+ * @param {string} filepath Path to the archive.
  * @param {string} dest Destination.
  * @param options {Object} An object of acceptable 7-zip switch options.
- * @param useBinary {string} binary to use.
  * @param override {boolean} should binary directory change?
  *
  * @resolve {array} Arguments passed to the child-process.
@@ -59,13 +50,24 @@ export function deleteArchive(
  *
  * @returns {Promise} Promise
  */
-export function extractArchive(
-  filepath: string,
-  dest: string | array,
-  options?: object,
-  useBinary?: string,
-  override?: boolean
-): Promise<any>;
+export function extractArchive(filepath: string, dest: string, options?: object, override?: boolean): Promise<any>;
+
+/**
+ * Extract only selected files from archive.
+ *
+ * @param {string} filepath Path to the archive.
+ * @param {string} dest Destination.
+ * @param {string|array} files Files in archive to extract.
+ * @param options {Object} An object of acceptable 7-zip switch options.
+ * @param override {boolean} should binary directory change?
+ *
+ * @resolve {array} Arguments passed to the child-process.
+ * @progress {array} Extracted files and directories.
+ * @reject {Error} The error as issued by 7-Zip.
+ *
+ * @returns {Promise} Promise
+ */
+export function onlyArchive(filepath: string, dest: string, files: string | array, options?: object, override?: boolean): Promise<any>;
 
 export function fullArchive(filepath: string, files: string | array, options?: object, useBinary?: string, override?: boolean): Promise<any>;
 export function listArchive(filepath: string, files: string | array, options?: object, useBinary?: string, override?: boolean): Promise<any>;
