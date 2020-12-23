@@ -72,7 +72,6 @@ Each will in turn call:
  * `platform` What platform application targeting? Either `win32`, `darwin`, or `linux`.
  * `extension` Binary extension name.
 
-
 Installation
 ------------
 
@@ -84,7 +83,6 @@ The binaries will be downloaded from:
 > On Windows - https://www.7-zip.org/download.html.
 
 > On Mac OSX - [![Release](https://github.com/techno-express/p7zip/workflows/Release/badge.svg)](https://github.com/techno-express/p7zip/actions/runs/401873413) compiled and available at [releases](https://github.com/techno-express/p7zip/releases/) previously https://rudix.org/.
-
 
 ```shell
 npm install --save node-7z-archive
@@ -125,6 +123,9 @@ Full 7zip Console Commands.
 
  Extracts files from an archive with their full paths in the current directory, or in an output directory
  Usage: `fullArchive` archivePath destination ...options
+
+ Extracts only the selected files from an archive to the current directory, or in an output directory
+ Usage: `onlyArchive` archivePath destination files ...options'
 
  Lists contents of archive.
  Usage: `listArchive` archivePath ...options
@@ -279,6 +280,21 @@ _____Options:_____ 7-Zip Switches, use without initial `'-'`.
  * `spec` An object of tech spec about the archive. Properties are: `path`,
    `type`, `method`, `physicalSize` and `headersSize` (Some of them may be
    missing with non-7z archives).
+
+**Error**
+ * `err` An Error object.
+
+### `onlyArchive`(filepath, dest, files, options)
+
+**Arguments**
+ * `filepath` The path to the archive you want to extract selected files from.
+ * `dest` Where to extract with full paths, the archive (creates folders for you).
+ * `files` What files to extract, will overwrite if file exits.
+ * `options` An object of options.
+
+**Progress**
+ * `files` A array of all the extracted files *AND* directories. The `/`
+   character is used as a path separator on every platform.
 
 **Error**
  * `err` An Error object.

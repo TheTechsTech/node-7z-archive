@@ -35,17 +35,13 @@ describe('Method: `onlyArchive`', function () {
       });
   });
 
-  it('should extract only on the right path', function (done) {
+  it('should extract only on the selected files', function (done) {
     onlyArchive('test/zip.7z', '.tmp/test', ['zip/folder/file0.txt', 'zip/file2.txt', 'zip/file3.txt'])
       .then(function () {
-        //  expect(fs.existsSync('.tmp/test/file3.txt')).to.be.eql(true);
         expect(fs.existsSync('.tmp/test/file0.txt')).to.be.eql(true);
         expect(fs.existsSync('.tmp/test/file1.txt')).to.be.eql(false);
         expect(fs.existsSync('.tmp/test/file2.txt')).to.be.eql(true);
-        done();
-      })
-      .catch((err) => {
-        console.log(err);
+        expect(fs.existsSync('.tmp/test/file3.txt')).to.be.eql(true);
         done();
       });
   });

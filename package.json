@@ -1,6 +1,6 @@
 {
   "name": "node-7z-archive",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "ESM front-end to 7-Zip, featuring alternative full 7z CLI tools, binaries for Linux, Windows, Mac OSX, seamlessly create 7zip SFX self extracting archives targeting different platforms.",
   "type": "module",
   "main": "lib/index.mjs",
@@ -63,6 +63,7 @@
     "extractArchive": "cli/extract.js",
     "fullArchive": "cli/full.js",
     "listArchive": "cli/list.js",
+    "onlyArchive": "cli/only.js",
     "renameArchive": "cli/rename.js",
     "createSfx": "cli/sfx.js",
     "testArchive": "cli/test.js",

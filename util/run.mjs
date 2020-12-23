@@ -2,7 +2,7 @@
 import {
   EOL
 } from 'os';
-import { spawning } from 'node-sys';
+import { spawning, isArray } from 'node-sys';
 import when from 'when';
 import {
   normalize,
@@ -62,6 +62,21 @@ export default function (binary = '7z', command = null, switches = {}, override 
       o = o.replace(/"/g, '');
       o = normalize(o);
       args.push(o);
+    }
+
+    if (switches.files) {
+      let files = switches.files;
+      delete switches.files;
+      if (isArray(files)) {
+        files.forEach(function (s) {
+          args.push(s);
+        });
+      } else {
+        args.push(files);
+      }
+
+      args.push('-r');
+      args.push('-aoa');
     }
 
     // Add switches to the `args` array.

@@ -27,7 +27,7 @@ let argv = minimist(process.argv.slice(2));
 /*
  * Command.
  */
-var command = Object.keys(pack.bin)[6];
+var command = Object.keys(pack.bin)[7];
 
 /**
  * Help.

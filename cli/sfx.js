@@ -35,7 +35,7 @@ let argv = minimist(process.argv.slice(2));
 /*
  * Command.
  */
-var command = Object.keys(pack.bin)[7];
+var command = Object.keys(pack.bin)[8];
 
 /**
  * Help.
@@ -131,8 +131,8 @@ if (argv.help || argv.h) {
     if (packageName && files && typeof sfxPromise.then === 'function') {
       console.log("Creating Sfx Package...");
       sfxPromise.progress((info) => {
-          console.log(info);
-        })
+        console.log(info);
+      })
         .then((file) => {
           console.log('Creation of installation package ' + packageName + ' saved to ' + file + ' done!');
         })
