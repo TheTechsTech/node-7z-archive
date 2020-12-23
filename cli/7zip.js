@@ -8,7 +8,7 @@
  * Dependencies.
  */
 import minimist from 'minimist';
-import platformBinary from '../util/binary.mjs';
+import { Binary } from '../lib/utility.js';
 import {
   createRequire
 } from 'module';
@@ -16,7 +16,7 @@ import {
 const require = createRequire(
   import.meta.url);
 const pack = require('../package.json'),
-  sevenBinary = platformBinary();
+  sevenBinary = Binary();
 
 /*
  * Arguments.

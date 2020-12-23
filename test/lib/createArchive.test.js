@@ -3,15 +3,15 @@
 import chai from 'chai';
 import {
   createArchive
-} from '../../lib/index.mjs';
+} from '../../lib/index.js';
 const expect = chai.expect;
 
 describe('Method: `createArchive`', function () {
 
   it('should return an error on 7z error', function (done) {
     createArchive('.tmp/test/addnot.7z', '.tmp/test/nothere', {
-        '???': true
-      })
+      '???': true
+    })
       .catch(function (err) {
         expect(err).to.be.an.instanceof(Error);
         done();

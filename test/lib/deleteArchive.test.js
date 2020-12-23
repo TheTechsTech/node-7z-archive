@@ -5,15 +5,15 @@ import fs from 'fs-extra';
 import {
   deleteArchive,
   fullArchive
-} from '../../lib/index.mjs';
+} from '../../lib/index.js';
 const expect = chai.expect;
 
 describe('Method: `deleteArchive`', function () {
 
   it('should return an error on 7z error', function (done) {
     deleteArchive('.tmp/test/addnot.7z', '.tmp/test/nothere', {
-        '???': true
-      })
+      '???': true
+    })
       .catch(function (err) {
         expect(err).to.be.an.instanceof(Error);
         done();
@@ -31,9 +31,9 @@ describe('Method: `deleteArchive`', function () {
   it('should accept array as source', function (done) {
     fs.copySync('test/zip.7z', '.tmp/d.7z');
     deleteArchive('.tmp/d.7z', [
-        'zip/file0.txt',
-        'zip/file1.txt',
-      ])
+      'zip/file0.txt',
+      'zip/file1.txt',
+    ])
       .then(function () {
         fullArchive('.tmp/d.7z', '.tmp/d').then(function () {
           let files = fs.readdirSync('.tmp/d/zip');

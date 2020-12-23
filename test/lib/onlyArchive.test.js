@@ -4,7 +4,7 @@ import chai from 'chai';
 import fs from 'fs-extra';
 import {
   onlyArchive
-} from '../../lib/index.mjs';
+} from '../../lib/index.js';
 const expect = chai.expect;
 
 describe('Method: `onlyArchive`', function () {

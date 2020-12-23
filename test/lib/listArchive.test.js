@@ -3,7 +3,7 @@
 import chai from 'chai';
 import {
   listArchive
-} from '../../lib/index.mjs';
+} from '../../lib/index.js';
 const expect = chai.expect;
 
 
@@ -41,8 +41,8 @@ describe('Method: `listArchive`', function () {
 
   it('should return an tech spec on fulfill', function (done) {
     listArchive('test/zip.7z', {
-        r: true
-      })
+      r: true
+    })
       .then(function (spec) {
         expect(spec).to.have.property('path');
         expect(spec).to.have.property('type');

@@ -3,7 +3,7 @@
 import chai from 'chai';
 import {
   testArchive
-} from '../../lib/index.mjs';
+} from '../../lib/index.js';
 const expect = chai.expect;
 
 describe('Method: `testArchive`', function () {
@@ -18,8 +18,8 @@ describe('Method: `testArchive`', function () {
 
   it('should return entries on progress', function (done) {
     testArchive('test/zip.7z', {
-        r: true
-      })
+      r: true
+    })
       .progress(function (entries) {
         expect(entries.length).to.be.at.least(1);
       })

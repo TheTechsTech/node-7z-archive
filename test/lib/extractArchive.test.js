@@ -4,7 +4,7 @@ import chai from 'chai';
 import fs from 'fs-extra';
 import {
   extractArchive
-} from '../../lib/index.mjs';
+} from '../../lib/index.js';
 const expect = chai.expect;
 
 describe('Method: `extractArchive`', function () {
@@ -19,8 +19,8 @@ describe('Method: `extractArchive`', function () {
 
   it('should return an error on output duplicate', function (done) {
     extractArchive('test/zip.7z', '.tmp/test', {
-        o: '.tmp/test/duplicate'
-      })
+      o: '.tmp/test/duplicate'
+    })
       .catch(function (err) {
         expect(err).to.be.an.instanceof(Error);
         done();

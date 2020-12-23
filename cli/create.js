@@ -9,7 +9,7 @@
  */
 import {
   createArchive
-} from '../lib/index.mjs';
+} from '../lib/index.js';
 import minimist from 'minimist';
 import {
   createRequire

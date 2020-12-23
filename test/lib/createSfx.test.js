@@ -2,7 +2,7 @@
 'use strict';
 import chai from 'chai';
 import fs from 'fs-extra';
-import createSfx from '../../lib/createSfx.mjs';
+import { createSfx } from '../../lib/createSfx.js';
 const expect = chai.expect;
 
 describe('Method: `createSfx`', function () {
@@ -21,9 +21,9 @@ describe('Method: `createSfx`', function () {
 
   it('should return an error on 7z error', function (done) {
     createSfx('test.exe', '.tmp/test/nothere',
-        '.tmp/test/', {
-          '???': true
-        })
+      '.tmp/test/', {
+      '???': true
+    })
       .catch(function (err) {
         expect(err).to.be.an.instanceof(Error);
         done();

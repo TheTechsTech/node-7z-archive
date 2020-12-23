@@ -11,7 +11,7 @@ import {
   createSfxMac,
   createSfxLinux,
   createSfxWindows
-} from '../lib/index.mjs';
+} from '../lib/index.js';
 import minimist from 'minimist';
 import {
   join

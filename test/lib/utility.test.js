@@ -2,7 +2,7 @@
 'use strict';
 
 import chai from 'chai';
-import { Binary, Files, ReplaceNativeSeparator, Run, Switches } from '../../lib/utility.mjs';
+import { Binary, Files, ReplaceNativeSeparator, Run, Switches } from '../../lib/utility.js';
 import { sep } from 'path';
 const expect = chai.expect;
 

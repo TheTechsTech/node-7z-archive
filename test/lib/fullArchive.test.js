@@ -4,7 +4,7 @@ import chai from 'chai';
 import fs from 'fs-extra';
 import {
   fullArchive
-} from '../../lib/index.mjs';
+} from '../../lib/index.js';
 const expect = chai.expect;
 
 describe('Method: `fullArchive`', function () {
@@ -19,8 +19,8 @@ describe('Method: `fullArchive`', function () {
 
   it('should return an error on output duplicate', function (done) {
     fullArchive('test/zip.7z', '.tmp/test', {
-        o: '.tmp/test/duplicate'
-      })
+      o: '.tmp/test/duplicate'
+    })
       .catch(function (err) {
         expect(err).to.be.an.instanceof(Error);
         done();
@@ -45,9 +45,9 @@ describe('Method: `fullArchive`', function () {
 
   it('should extract only given wildcards', function (done) {
     fullArchive('test/wildcards.zip', '.tmp/test/', {
-        wildcards: ['*.txt'],
-        r: true
-      })
+      wildcards: ['*.txt'],
+      r: true
+    })
       .progress(function (files) {
         files.forEach(function (f) {
           expect(f).to.include('.txt');

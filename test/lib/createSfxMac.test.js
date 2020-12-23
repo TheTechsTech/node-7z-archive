@@ -3,7 +3,7 @@
 import chai from 'chai';
 import {
   createSfxMac
-} from '../../lib/index.mjs';
+} from '../../lib/index.js';
 import fs from 'fs-extra';
 const expect = chai.expect;
 
