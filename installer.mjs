@@ -14,6 +14,7 @@ import {
 import { spawnSync } from 'child_process';
 import { unpack } from 'node-unar';
 import { wget, isString } from 'node-wget-fetch';
+import { isWindows } from 'node-sys';
 
 const __filename = fileURLToPath(
   import.meta.url);
@@ -150,7 +151,7 @@ function makeExecutable(binary = [], binaryFolder = '') {
 
 let extractionPromises = [];
 let platforms = [linuxPlatform, appleMacPlatform, windowsOtherPlatform];
-if (process.platform == 'win32')
+if (isWindows())
   platforms = [linuxPlatform, appleMacPlatform, windowsPlatform, windowsOtherPlatform];
 
 platforms.forEach((dataFor) => {
@@ -214,8 +215,8 @@ Promise.all(extractionPromises)
     extracted.forEach(function (dataFor) {
       if (dataFor.sfxModules && dataFor.platform == process.platform) {
         try {
-          const directory = (process.platform == "win32") ? dataFor.binaryDestinationDir : binaryDestination;
-          extraUnpack(join(binaryDestination, (process.platform == "win32") ? '7z.exe' : '7z'),
+          const directory = isWindows() ? dataFor.binaryDestinationDir : binaryDestination;
+          extraUnpack(join(binaryDestination, (isWindows() ? '7z.exe' : '7z')),
             dataFor.extraSourceFile,
             directory,
             dataFor.sfxModules
