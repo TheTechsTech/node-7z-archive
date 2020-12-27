@@ -146,7 +146,7 @@ Full 7zip Console Commands.
  The `7z` and `7za` binary on your system is located in directory: ...\...\node-7z-archive\binaries\...
 ```
 
-> ____This package is a rewrite of [node-7z-forall](https://github.com/techno-express/node-7z-forall)____. The original author has removed the version it was a fork of [node-7z](https://github.com/quentinrossetti/node-7z).
+> ____This package is a rewrite of [node-7z-forall](https://github.com/techno-express/node-7z-forall)____. The original author has removed the version it was a fork of [node-7z](https://github.com/quentinrossetti/node-7z). The methods are still backwards compatible with previous naming of `add`, `delete`, `extract`, `extractFull`, `list`, `rename`, `test`, `update`.
 
 API
 ---
