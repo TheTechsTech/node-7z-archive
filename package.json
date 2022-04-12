@@ -74,7 +74,7 @@
   },
   "dependencies": {
     "fs-extra": "^9.1.0",
-    "minimist": "1.2.5",
+    "minimist": "1.2.6",
     "node-sys": "^1.1.6",
     "node-unar": "^1.0.7",
     "node-wget-fetch": "^1.1.2",
