@@ -1,6 +1,6 @@
 {
   "name": "node-7z-archive",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "ESM front-end to 7-Zip, featuring alternative full 7z CLI tools, binaries for Linux, Windows, Mac OSX, seamlessly create 7zip SFX self extracting archives targeting different platforms.",
   "type": "module",
   "main": "lib/index.js",
@@ -75,8 +75,8 @@
   "dependencies": {
     "fs-extra": "^9.1.0",
     "minimist": "1.2.6",
-    "node-sys": "^1.1.6",
-    "node-unar": "^1.0.7",
+    "node-sys": "^1.1.7",
+    "node-unar": "^1.0.8",
     "node-wget-fetch": "^1.1.2",
     "when": "^3.7.8"
   },
