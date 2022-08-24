@@ -1,11 +1,11 @@
 'use strict';
 
-import { createArchive } from './index';
+import { createArchive } from './index.js';
 import when from 'when';
 import { fileURLToPath } from 'url';
 import { dirname, sep, join } from 'path';
 import fs from 'fs-extra';
-import { Binary } from './utility';
+import { Binary } from './utility.js';
 import { isWindows } from 'node-sys';
 const platformTitle = {
     win32: 'Windows OS',

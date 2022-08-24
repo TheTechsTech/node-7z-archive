@@ -1,8 +1,8 @@
 'use strict';
 
 import when from 'when';
-import { Files, ReplaceNativeSeparator, Run } from './utility';
-import { createSfx } from './createSfx';
+import { Files, ReplaceNativeSeparator, Run } from './utility.js';
+import { createSfx } from './createSfx.js';
 import { isWindows } from 'node-sys';
 
 function retry(

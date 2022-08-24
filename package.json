@@ -5,7 +5,7 @@
   "type": "module",
   "main": "lib/index.js",
   "scripts": {
-    "test": "mocha --recursive test/ --timeout=0",
+    "test": "npm run build && mocha --recursive test/ --timeout=0",
     "report": "npx c8 npm test",
     "coverage": "npx c8 --reporter json npm test && npx codecov -f coverage/coverage-final.json",
     "install": "node installer.mjs",
