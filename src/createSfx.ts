@@ -6,12 +6,12 @@ import { fileURLToPath } from 'url';
 import { dirname, sep, join } from 'path';
 import fs from 'fs-extra';
 import { Binary } from './utility';
-import { isArray, isWindows } from 'node-sys';
+import { isWindows } from 'node-sys';
 const platformTitle = {
     win32: 'Windows OS',
     darwin: 'Apple macOS',
     linux: 'Linux OS',
-};
+} as Record<NodeJS.Platform, string>;
 const title =
     ' installation package created on ' + platformTitle[process.platform] + '.';
 const prompt = 'Do you want to install ';
@@ -24,7 +24,7 @@ const __dirname = dirname(__filename);
 const pwd = __dirname.split(sep);
 
 /* c8 ignore next 18 */
-function getPath(module, folder = pwd) {
+function getPath(module: string, folder = pwd): string | null {
     if (folder.length < 1) {
         return null;
     }
@@ -115,20 +115,24 @@ archive.pipe(SfxDirectory, {
  *
  * @returns {Promise} Promise
  */
-export const createSfx = function (
-    name: String,
-    files: Array,
-    destination: String = '',
-    options: {} = {
+export function createSfx(
+    name: string,
+    files: Array<string>,
+    destination: string = '',
+    options: Record<string, any> = {
         title: null,
         beginPrompt: null,
         progress: null,
     },
-    type: String = 'gui',
-    platform: String = 'win32',
-    extension: String = '.exe'
-): Promise {
-    return when.promise(function (resolve, reject, progress) {
+    type: string = 'gui',
+    platform: string = 'win32',
+    extension: string = '.exe'
+) {
+    return when.promise(function (
+        resolve: (arg0: string) => void,
+        reject: (arg0: string) => void,
+        progress: (arg0: any) => any
+    ) {
         let directory =
             destination != '' && fs.existsSync(destination)
                 ? destination
@@ -176,7 +180,7 @@ export const createSfx = function (
         let sfxModule =
             type == 'gui' ? '7zwin32.sfx' : '7zCon' + platform + '.sfx';
         let sfx = name.includes(extension) ? name : name + extension;
-        let list = isArray(files)
+        let list = Array.isArray(files)
             ? [configFile].concat(files)
             : configFile + ' ' + files;
         sfx = join(SfxDirectory, sfx);
@@ -184,10 +188,10 @@ export const createSfx = function (
             sfx: sfxModule,
         });
         createArchive(sfx, list, params, override)
-            .progress((data) => {
+            .progress((data: any) => {
                 return progress(data);
             })
-            .then((data) => {
+            .then((data: any) => {
                 fs.unlink(configFile, (err) => {
                     if (err) console.error(err);
 
@@ -202,9 +206,9 @@ export const createSfx = function (
                     }
                 });
             })
-            .catch((err) => {
+            .catch((err: string) => {
                 fs.removeSync(configFile);
                 return reject(err);
             });
     });
-};
+}

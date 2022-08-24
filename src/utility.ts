@@ -4,14 +4,7 @@ import when from 'when';
 import { EOL } from 'os';
 import { fileURLToPath } from 'url';
 import { dirname, join, sep, sep as nativeSeparator, normalize } from 'path';
-import {
-    spawning,
-    isUndefined,
-    isArray,
-    isString,
-    isWindows,
-    isBool,
-} from 'node-sys';
+import { spawning, isUndefined, isString, isWindows, isBool } from 'node-sys';
 
 const __filename = fileURLToPath(import.meta.url);
 
@@ -40,14 +33,14 @@ export const Binary = function (override = false, binary = '7z') {
  * @param  {string|array} files
  * @return {string}
  */
-export const Files = function (files: string | array): string {
+export const Files = function (files: string | string[]): string {
     if (isUndefined(files)) {
         return '';
     }
 
     let toProcess = '';
 
-    if (isArray(files)) {
+    if (Array.isArray(files)) {
         files.forEach(function (f) {
             toProcess += '"' + f + '" ';
         });
@@ -86,17 +79,21 @@ export const ReplaceNativeSeparator = function (path: string): string {
  *
  * @returns {Promise} Promise
  */
-export const Run = function (
+export function Run(
     binary: string = '7z',
-    command: string = null,
-    switches: Array = {},
+    command: string | null = null,
+    switches: { files?: string[] } = {},
     override: boolean = false
-): Promise {
-    return when.promise(function (fulfill, reject, progress) {
+) {
+    return when.promise(function (
+        fulfill: (arg0: string[]) => void,
+        reject: (arg0: Error) => void,
+        progress: (arg0: any) => void
+    ) {
         // Parse the command variable. If the command is not a string reject the
         // Promise. Otherwise transform the command into two variables: the command
         // name and the arguments.
-        if (!isString(command) || !isString(binary)) {
+        if (typeof command !== 'string' || !isString(binary)) {
             return reject(new Error('Command and Binary must be a string'));
         }
 
@@ -136,7 +133,7 @@ export const Run = function (
             let files = switches.files;
             delete switches.files;
 
-            if (isArray(files)) {
+            if (Array.isArray(files)) {
                 files.forEach(function (s) {
                     args.push(s);
                 });
@@ -172,15 +169,15 @@ export const Run = function (
         // When an stdout is emitted, parse it. If an error is detected in the body
         // of the stdout create an new error with the 7-Zip error message as the
         // error's message. Otherwise progress with stdout message.
-        let err;
+        let err: Error;
         let reg = new RegExp('Error:(' + EOL + '|)?(.*)', 'i');
 
-        let onprogress = (object) => {
+        let onprogress = (object: { output: any }) => {
             progress(object.output);
             return args;
         };
 
-        let onerror = (data) => {
+        let onerror = (data: string) => {
             let res = reg.exec(data);
 
             if (res) {
@@ -199,15 +196,15 @@ export const Run = function (
             },
         };
         spawning(res.cmd, res.args, res.options)
-            .then((data) => {
+            .then((data: string[]) => {
                 if (data === args) return fulfill(args);
                 return reject(err);
             })
-            .catch((err) => {
+            .catch((err: Error) => {
                 return reject(err);
             });
     });
-};
+}
 
 /**
  * Transform an object of options into an array that can be passed to the
@@ -215,7 +212,7 @@ export const Run = function (
  * @param  {Object} switches An object of options
  * @return {array} Array to pass to the `run` function.
  */
-export const Switches = function (switches: {}): array {
+export const Switches = function (switches: Record<string, any>) {
     // Default value for switches
     switches = switches || {};
     var a = [];
@@ -245,7 +242,7 @@ export const Switches = function (switches: {}): array {
             } // Allow raw switches to be added to the command, repeating switches like
             // -i is not possible otherwise.
             else if (s === 'raw') {
-                switches.raw.forEach(function (rawValue) {
+                switches.raw.forEach(function (rawValue: any) {
                     a.push(rawValue);
                 });
             } else if (switches[s].indexOf(' ') === -1) {

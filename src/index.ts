@@ -6,33 +6,33 @@ import { createSfx } from './createSfx';
 import { isWindows } from 'node-sys';
 
 function retry(
-    command,
-    options,
-    override,
-    progress,
-    onprogress,
-    resolve,
-    reject,
-    archive
+    command: string | undefined,
+    options: {},
+    override: boolean | undefined,
+    progress: (arg0: any) => void,
+    onprogress: (data: any) => any[],
+    resolve: (arg0: any) => void,
+    reject: (arg0: any) => void,
+    archive: string
 ) {
     // Start the command
     return Run('7z', command, options, override)
-        .progress(function (data) {
+        .progress(function (data: any) {
             return progress(onprogress(data));
         }) // When all is done resolve the Promise.
-        .then(function (args) {
+        .then(function (args: any) {
             return resolve(args);
         }) // Catch the error and pass it to the reject function of the Promise.
         .catch(function () {
             console.error(archive + ' failed using `7z`, retying with `7za`.');
             Run('7za', command, options, override)
-                .progress(function (data) {
+                .progress(function (data: any) {
                     return progress(onprogress(data));
                 })
-                .then(function (args) {
+                .then(function (args: any) {
                     return resolve(args);
                 })
-                .catch(function (err) {
+                .catch(function (err: any) {
                     return reject(err);
                 });
         });
@@ -55,15 +55,24 @@ function retry(
 export const createArchive =
     (SevenZip.createArchive =
     SevenZip.add =
-        function (filepath, files, options, override = false) {
-            return when.promise(function (resolve, reject, progress) {
+        function (
+            filepath: string,
+            files: string | string[],
+            options: any,
+            override = false
+        ) {
+            return when.promise(function (
+                resolve: (value: any) => void,
+                reject: (reason: any) => void,
+                progress: (arg0: any) => any
+            ) {
                 /**
                  * When a stdout is emitted, parse each line and search for a pattern.When
                  * the pattern is found, extract the file (or directory) name from it and
                  * pass it to an array. Finally returns this array.
                  */
-                function onprogress(data) {
-                    let entries = [];
+                function onprogress(data: string) {
+                    let entries: string[] = [];
                     data.split('\n').forEach(function (line) {
                         if (line.substr(0, 1) === '+') {
                             entries.push(
@@ -110,7 +119,12 @@ export const createArchive =
 export const deleteArchive =
     (SevenZip.deleteArchive =
     SevenZip.delete =
-        function (filepath, files, options, override = false) {
+        function (
+            filepath: string,
+            files: string | string[],
+            options: { files?: string[] | undefined } | undefined,
+            override = false
+        ) {
             return new Promise(function (resolve, reject) {
                 // Convert array of files into a string if needed.
                 files = Files(files);
@@ -153,15 +167,24 @@ export const deleteArchive =
 export const extractArchive =
     (SevenZip.extractArchive =
     SevenZip.extract =
-        function (filepath, dest = '*', options = {}, override = false) {
-            return when.promise(function (resolve, reject, progress) {
+        function (
+            filepath: string,
+            dest = '*',
+            options = {},
+            override = false
+        ) {
+            return when.promise(function (
+                resolve: (value: any) => void,
+                reject: (reason: any) => void,
+                progress: (arg0: any) => any
+            ) {
                 /**
                  * When a stdout is emitted, parse each line and search for a pattern.When
                  * the pattern is found, extract the file (or directory) name from it and
                  * pass it to an array. Finally returns this array.
                  */
-                function onprogress(data) {
-                    let entries = [];
+                function onprogress(data: string) {
+                    let entries: string[] = [];
                     data.split('\n').forEach(function (line) {
                         if (line.substr(0, 1) === '-') {
                             entries.push(
@@ -207,15 +230,24 @@ export const extractArchive =
 export const fullArchive =
     (SevenZip.fullArchive =
     SevenZip.extractFull =
-        function (filepath, dest = '*', options = {}, override = false) {
-            return when.promise(function (resolve, reject, progress) {
+        function (
+            filepath: string,
+            dest = '*',
+            options = {},
+            override = false
+        ) {
+            return when.promise(function (
+                resolve: (value: any) => void,
+                reject: (reason: any) => void,
+                progress: (arg0: any) => any
+            ) {
                 /**
                  * When a stdout is emitted, parse each line and search for a pattern.When
                  * the pattern is found, extract the file (or directory) name from it and
                  * pass it to an array. Finally returns this array.
                  */
-                function onprogress(data) {
-                    let entries = [];
+                function onprogress(data: string) {
+                    let entries: string[] = [];
                     data.split('\n').forEach(function (line) {
                         if (line.substr(0, 1) === '-') {
                             entries.push(
@@ -259,9 +291,17 @@ export const fullArchive =
 export const listArchive =
     (SevenZip.listArchive =
     SevenZip.list =
-        function (filepath, options, override = false) {
-            return when.promise(function (resolve, reject, progress) {
-                let spec = {};
+        function (
+            filepath: string,
+            options: { files?: string[] | undefined } | undefined,
+            override = false
+        ) {
+            return when.promise(function (
+                resolve: (value: any) => void,
+                reject: (reason: any) => void,
+                progress: (arg0: any) => any
+            ) {
+                let spec: Record<string, any> = {};
 
                 /* jshint maxlen: 130 */
                 let regex =
@@ -275,8 +315,8 @@ export const listArchive =
                  * the pattern is found, extract the file (or directory) name from it and
                  * pass it to an array. Finally returns this array.
                  */
-                function onprogress(data) {
-                    let entries = [];
+                function onprogress(data: string) {
+                    let entries: string[] = [];
 
                     if (buffer.length > 0) {
                         data = buffer + data;
@@ -324,25 +364,25 @@ export const listArchive =
                 // Create a string that can be parsed by `run`.
                 let command = 'l "' + filepath + '" ';
                 Run(isWindows() ? '7z' : '7za', command, options, override)
-                    .progress(function (data) {
+                    .progress(function (data: string) {
                         return progress(onprogress(data));
                     })
                     .then(function () {
                         return resolve(spec);
                     })
-                    .catch(function (err) {
+                    .catch(function (err: any) {
                         if (isWindows()) {
                             console.error(
                                 'ListArchive failed using `7z`, retying with `7za`.'
                             );
                             Run('7za', command, options, override)
-                                .progress(function (data) {
+                                .progress(function (data: string) {
                                     return progress(onprogress(data));
                                 })
-                                .then(function (args) {
+                                .then(function (args: any) {
                                     return resolve(args);
                                 })
-                                .catch(function (err) {
+                                .catch(function (err: any) {
                                     return reject(err);
                                 });
                         } else {
@@ -370,8 +410,18 @@ export const listArchive =
 export const onlyArchive =
     (SevenZip.onlyArchive =
     SevenZip.only =
-        function (filepath, dest, files, options = {}, override = false) {
-            return when.promise(function (resolve, reject, progress) {
+        function (
+            filepath: string,
+            dest: string,
+            files: any,
+            options = {},
+            override = false
+        ) {
+            return when.promise(function (
+                resolve: (value: any) => void,
+                reject: (reason: any) => void,
+                progress: (arg0: any) => any
+            ) {
                 options = Object.assign(options, {
                     files: files,
                 });
@@ -381,8 +431,8 @@ export const onlyArchive =
                  * the pattern is found, extract the file (or directory) name from it and
                  * pass it to an array. Finally returns this array.
                  */
-                function onprogress(data) {
-                    let entries = [];
+                function onprogress(data: string) {
+                    let entries: string[] = [];
                     data.split('\n').forEach(function (line) {
                         if (line.substr(0, 1) === '-') {
                             entries.push(
@@ -428,15 +478,24 @@ export const onlyArchive =
 export const renameArchive =
     (SevenZip.renameArchive =
     SevenZip.rename =
-        function (filepath, files, options, override = false) {
-            return when.promise(function (resolve, reject, progress) {
+        function (
+            filepath: string,
+            files: string | string[],
+            options: {},
+            override = false
+        ) {
+            return when.promise(function (
+                resolve: (value: any) => void,
+                reject: (reason: any) => void,
+                progress: (arg0: any) => any
+            ) {
                 /**
                  * When a stdout is emitted, parse each line and search for a pattern.When
                  * the pattern is found, extract the file (or directory) name from it and
                  * pass it to an array. Finally returns this array.
                  */
-                function onprogress(data) {
-                    let entries = [];
+                function onprogress(data: string) {
+                    let entries: string[] = [];
                     data.split('\n').forEach(function (line) {
                         if (line.substr(0, 1) === 'U') {
                             entries.push(
@@ -483,15 +542,19 @@ export const renameArchive =
 export const testArchive =
     (SevenZip.testArchive =
     SevenZip.test =
-        function (filepath, options, override = false) {
-            return when.promise(function (resolve, reject, progress) {
+        function (filepath: string, options: {}, override = false) {
+            return when.promise(function (
+                resolve: (value: any) => void,
+                reject: (reason: any) => void,
+                progress: (arg0: any) => any
+            ) {
                 /**
                  * When a stdout is emitted, parse each line and search for a pattern.When
                  * the pattern is found, extract the file (or directory) name from it and
                  * pass it to an array. Finally returns this array.
                  */
-                function onprogress(data) {
-                    let entries = [];
+                function onprogress(data: string) {
+                    let entries: string[] = [];
                     data.split('\n').forEach(function (line) {
                         if (line.substr(0, 1) === 'T') {
                             entries.push(
@@ -537,15 +600,24 @@ export const testArchive =
 export const updateArchive =
     (SevenZip.updateArchive =
     SevenZip.update =
-        function (filepath, files, options, override = false) {
-            return when.promise(function (resolve, reject, progress) {
+        function (
+            filepath: string,
+            files: string | string[],
+            options: {},
+            override = false
+        ) {
+            return when.promise(function (
+                resolve: (value: any) => void,
+                reject: (reason: any) => void,
+                progress: (arg0: any) => any
+            ) {
                 /**
                  * When a stdout is emitted, parse each line and search for a pattern.When
                  * the pattern is found, extract the file (or directory) name from it and
                  * pass it to an array. Finally returns this array.
                  */
-                function onprogress(data) {
-                    let entries = [];
+                function onprogress(data: string) {
+                    let entries: string[] = [];
                     data.split('\n').forEach(function (line) {
                         if (line.substr(0, 1) === 'U') {
                             entries.push(
@@ -619,11 +691,11 @@ export const updateArchive =
  * @returns {Promise} Promise
  */
 export const createSfxWindows = (SevenZip.windowsSfx = function (
-    name,
-    files,
-    destination,
-    options,
-    type
+    name: string,
+    files: string[],
+    destination: string | undefined,
+    options: Record<string, any> | undefined,
+    type: string | undefined
 ) {
     return createSfx(name, files, destination, options, type, 'win32', '.exe');
 });
@@ -645,10 +717,10 @@ export const createSfxWindows = (SevenZip.windowsSfx = function (
  * @returns {Promise} Promise
  */
 export const createSfxLinux = (SevenZip.linuxSfx = function (
-    name,
-    files,
-    destination,
-    options
+    name: string,
+    files: string[],
+    destination: string | undefined,
+    options: Record<string, any> | undefined
 ) {
     return createSfx(
         name,
@@ -678,10 +750,10 @@ export const createSfxLinux = (SevenZip.linuxSfx = function (
  * @returns {Promise} Promise
  */
 export const createSfxMac = (SevenZip.macSfx = function (
-    name,
-    files,
-    destination,
-    options
+    name: string,
+    files: string[],
+    destination: string | undefined,
+    options: Record<string, any> | undefined
 ) {
     return createSfx(
         name,
