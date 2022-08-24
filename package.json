@@ -8,7 +8,9 @@
     "test": "mocha --recursive test/ --timeout=0",
     "report": "npx c8 npm test",
     "coverage": "npx c8 --reporter json npm test && npx codecov -f coverage/coverage-final.json",
-    "install": "node installer.mjs"
+    "install": "node installer.mjs",
+    "build": "tsc -p ./ || echo done",
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -82,6 +84,7 @@
   },
   "devDependencies": {
     "chai": "^4.3.6",
-    "mocha": "^8.4.0"
+    "mocha": "^8.4.0",
+    "typescript": "^4.7.4"
   }
 }
