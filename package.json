@@ -5,10 +5,12 @@
   "type": "module",
   "main": "lib/index.js",
   "scripts": {
-    "test": "mocha --recursive test/ --timeout=0",
+    "test": "npm run build && mocha --recursive test/ --timeout=0",
     "report": "npx c8 npm test",
     "coverage": "npx c8 --reporter json npm test && npx codecov -f coverage/coverage-final.json",
-    "install": "node installer.mjs"
+    "install": "node installer.mjs",
+    "build": "tsc -p ./ || echo done",
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -40,7 +42,8 @@
     "redx25 <red.mage25@gmail.com>",
     "Quentin Rossetti <quentin.rossetti@gmail.com>",
     "František Gič <frantisek.gic@gmail.com>",
-    "Oskar Larsson Högfeldt <g@oskar-lh.name>"
+    "Oskar Larsson Högfeldt <g@oskar-lh.name>",
+    "Amin Yahyaabadi <aminyahyaabadi74@gmail.com>"
   ],
   "license": "MIT",
   "bugs": {
@@ -73,15 +76,24 @@
     "node": ">=12.0.0"
   },
   "dependencies": {
-    "fs-extra": "^10.0.0",
+    "fs-extra": "^10.1.0",
     "minimist": "1.2.6",
     "node-sys": "^1.1.7",
     "node-unar": "^1.0.8",
-    "node-wget-fetch": "^1.1.2",
+    "node-wget-fetch": "^1.1.3",
     "when": "^3.7.8"
   },
+  "optionalDependencies": {
+      "@types/when": "^2.4.34"
+  },
   "devDependencies": {
+    "@types/chai": "^4.3.3",
+    "@types/fs-extra": "^9.0.13",
+    "@types/minimist": "1.2.2",
+    "@types/mocha": "^9.1.1",
+    "@types/node": "^18.7.12",
     "chai": "^4.3.6",
-    "mocha": "^8.4.0"
+    "mocha": "^10.0.0",
+    "typescript": "^4.7.4"
   }
 }

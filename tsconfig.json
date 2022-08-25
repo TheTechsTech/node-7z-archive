@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "noFallthroughCasesInSwitch": true,
+    "declaration": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "incremental": true,
+    "inlineSourceMap": false,
+    "inlineSources": false,
+    "preserveSymlinks": true,
+    "removeComments": false,
+    "lib": ["ES2020"],
+    "target": "ES2020",
+    "allowJs": true,
+    "esModuleInterop": true,
+    "module": "EsNext",
+    "moduleResolution": "node",
+    "importHelpers": false,
+    "outDir": "./lib"
+  },
+  "compileOnSave": false,
+  "include": ["src"]
+}
