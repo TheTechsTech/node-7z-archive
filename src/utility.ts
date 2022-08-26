@@ -184,6 +184,7 @@ export function Run(
                 err = new Error(res[2].substr(0, res[2].length - 1));
                 return err;
             }
+            return;
         };
 
         let res = {
@@ -196,7 +197,7 @@ export function Run(
             },
         };
         spawning(res.cmd, res.args, res.options)
-            .then((data: string[]) => {
+            .then((data) => {
                 if (data === args) return fulfill(args);
                 return reject(err);
             })

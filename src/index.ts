@@ -316,7 +316,14 @@ export const listArchive =
                  * pass it to an array. Finally returns this array.
                  */
                 function onprogress(data: string) {
-                    let entries: string[] = [];
+                    type Entry = {
+                        date: Date;
+                        attr: string;
+                        size: number;
+                        name: string;
+                    };
+
+                    let entries: Entry[] = [];
 
                     if (buffer.length > 0) {
                         data = buffer + data;
