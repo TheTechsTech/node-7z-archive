@@ -85,7 +85,7 @@ export function Run(
     switches: { files?: string[] } = {},
     override: boolean = false
 ) {
-    return when.promise(function (
+    return when.promise<string[]>(function (
         fulfill: (arg0: string[]) => void,
         reject: (arg0: Error) => void,
         progress: (arg0: any) => void

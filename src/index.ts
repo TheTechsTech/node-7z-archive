@@ -20,7 +20,7 @@ function retry(
         .progress(function (data: any) {
             return progress(onprogress(data));
         }) // When all is done resolve the Promise.
-        .then(function (args: any) {
+        .then(function (args: string[]) {
             return resolve(args);
         }) // Catch the error and pass it to the reject function of the Promise.
         .catch(function () {
@@ -29,7 +29,7 @@ function retry(
                 .progress(function (data: any) {
                     return progress(onprogress(data));
                 })
-                .then(function (args: any) {
+                .then(function (args: string[]) {
                     return resolve(args);
                 })
                 .catch(function (err: any) {
@@ -61,8 +61,8 @@ export const createArchive =
             options: any,
             override = false
         ) {
-            return when.promise(function (
-                resolve: (value: any) => void,
+            return when.promise<string[]>(function (
+                resolve: (args: string[]) => void,
                 reject: (reason: any) => void,
                 progress: (arg0: any) => any
             ) {
@@ -125,7 +125,7 @@ export const deleteArchive =
             options: { files?: string[] | undefined } | undefined,
             override = false
         ) {
-            return new Promise(function (resolve, reject) {
+            return new Promise<string[]>(function (resolve, reject) {
                 // Convert array of files into a string if needed.
                 files = Files(files);
                 // Create a string that can be parsed by `run`.
@@ -173,8 +173,8 @@ export const extractArchive =
             options = {},
             override = false
         ) {
-            return when.promise(function (
-                resolve: (value: any) => void,
+            return when.promise<string[]>(function (
+                resolve: (args: string[]) => void,
                 reject: (reason: any) => void,
                 progress: (arg0: any) => any
             ) {
@@ -236,8 +236,8 @@ export const fullArchive =
             options = {},
             override = false
         ) {
-            return when.promise(function (
-                resolve: (value: any) => void,
+            return when.promise<string[]>(function (
+                resolve: (args: string[]) => void,
                 reject: (reason: any) => void,
                 progress: (arg0: any) => any
             ) {
@@ -296,8 +296,8 @@ export const listArchive =
             options: { files?: string[] | undefined } | undefined,
             override = false
         ) {
-            return when.promise(function (
-                resolve: (value: any) => void,
+            return when.promise<Record<string, any>>(function (
+                resolve: (spec: Record<string, any>) => void,
                 reject: (reason: any) => void,
                 progress: (arg0: any) => any
             ) {
@@ -424,8 +424,8 @@ export const onlyArchive =
             options = {},
             override = false
         ) {
-            return when.promise(function (
-                resolve: (value: any) => void,
+            return when.promise<string[]>(function (
+                resolve: (args: string[]) => void,
                 reject: (reason: any) => void,
                 progress: (arg0: any) => any
             ) {
@@ -491,8 +491,8 @@ export const renameArchive =
             options: {},
             override = false
         ) {
-            return when.promise(function (
-                resolve: (value: any) => void,
+            return when.promise<string[]>(function (
+                resolve: (args: string[]) => void,
                 reject: (reason: any) => void,
                 progress: (arg0: any) => any
             ) {
@@ -550,8 +550,8 @@ export const testArchive =
     (SevenZip.testArchive =
     SevenZip.test =
         function (filepath: string, options: {}, override = false) {
-            return when.promise(function (
-                resolve: (value: any) => void,
+            return when.promise<string[]>(function (
+                resolve: (args: string[]) => void,
                 reject: (reason: any) => void,
                 progress: (arg0: any) => any
             ) {
@@ -613,8 +613,8 @@ export const updateArchive =
             options: {},
             override = false
         ) {
-            return when.promise(function (
-                resolve: (value: any) => void,
+            return when.promise<string[]>(function (
+                resolve: (args: string[]) => void,
                 reject: (reason: any) => void,
                 progress: (arg0: any) => any
             ) {
