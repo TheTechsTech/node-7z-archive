@@ -85,7 +85,7 @@ export function Run(
     switches: { files?: string[] } = {},
     override: boolean = false
 ) {
-    return when.promise(function (
+    return when.promise<string[]>(function (
         fulfill: (arg0: string[]) => void,
         reject: (arg0: Error) => void,
         progress: (arg0: any) => void
@@ -184,6 +184,7 @@ export function Run(
                 err = new Error(res[2].substr(0, res[2].length - 1));
                 return err;
             }
+            return;
         };
 
         let res = {
@@ -196,7 +197,7 @@ export function Run(
             },
         };
         spawning(res.cmd, res.args, res.options)
-            .then((data: string[]) => {
+            .then((data) => {
                 if (data === args) return fulfill(args);
                 return reject(err);
             })

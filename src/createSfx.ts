@@ -128,10 +128,10 @@ export function createSfx(
     platform: string = 'win32',
     extension: string = '.exe'
 ) {
-    return when.promise(function (
-        resolve: (arg0: string) => void,
-        reject: (arg0: string) => void,
-        progress: (arg0: any) => any
+    return when.promise<string>(function (
+        resolve: (sfx: string) => void,
+        reject: (err: string) => void,
+        progress: (data: any) => any
     ) {
         let directory =
             destination != '' && fs.existsSync(destination)
