@@ -191,17 +191,16 @@ export function Run(
 export const Switches = function (switches: Record<string, any>) {
     // Default value for switches
     switches = switches || {};
-    var a = [];
+    let a = [];
     // Set default values of boolean switches
     switches.so = switches.so === true ? true : false;
     switches.spl = switches.spl === true ? true : false;
     switches.ssc = switches.ssc === false ? false : true;
     switches.ssw = switches.ssw === true ? true : false;
     switches.y = switches.y === false ? false : true;
-    var s;
 
     /*jshint forin:false*/
-    for (s in switches) {
+    for (const s in switches) {
         // Switches that are set or not. Just add them to the array if they are
         // present. Differ the `ssc` switch treatment to later in the function.
         if (switches[s] === true && s !== 'ssc') {
@@ -212,19 +211,16 @@ export const Switches = function (switches: Record<string, any>) {
         // wrap the value with double quotes. Else just add the switch and its value
         // to the string. Doubles quotes are used for parsing with a RegExp later.
         if (!isBool(switches[s])) {
-            // Special treatment for wildcards
             if (s === 'wildcards') {
+                // Special treatment for wildcards
                 a.unshift(switches.wildcards);
-            } // Allow raw switches to be added to the command, repeating switches like
-            // -i is not possible otherwise.
-            else if (s === 'raw') {
-                switches.raw.forEach(function (rawValue: any) {
-                    a.push(rawValue);
-                });
-            } else if (switches[s].indexOf(' ') === -1) {
-                a.push('-' + s + switches[s]);
+            } else if (s === 'raw') {
+                // Allow raw switches to be added to the command, 
+                // otherwise repeating switches like -i is not possible.                
+                a = [...a, ...switches.raw];
             } else {
-                a.push('-' + s + '"' + switches[s] + '"');
+                const quote = switches[s].includes(' ') ? '"' : '';
+                a.push(`-${s}${quote}${switches[s]}${quote}`);
             }
         }
 
