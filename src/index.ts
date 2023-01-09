@@ -284,8 +284,6 @@ export const listArchive =
                         name: string;
                     };
 
-                    // let beginningDone = false;
-
                     let entries: Entry[] = [];
 
                     if (buffer.length > 0) {
@@ -293,43 +291,49 @@ export const listArchive =
                         buffer = '';
                     }
 
-                    const params = {
-                        path: 'Path = ',
-                        type: 'Type = ',
-                        method: 'Method = ',
-                        physicalSize: 'Physical Size = ',
-                        headersSize: 'Headers Size = ',
-                    };                    
+                    // Populate the tech specs of the archive that are passed to the 
+                    // resolve handler.        
+                    type Param = [string, string, Function | null];
 
-                    data.split('\n').forEach(function (line) {
-                        // Populate the tech specs of the archive that are passed to the
-                        // resolve handler.
-                        if (line.startsWith(params.path)) {
-                            spec.path = line.slice(params.path.length);
-                        } else if (line.startsWith(params.type)) {
-                            spec.type = line.slice(params.type.length);
-                        } else if (line.startsWith(params.method)) {
-                            spec.method = line.slice(params.method.length);
-                        } else if (line.startsWith(params.physicalSize)) {
-                            spec.physicalSize = parseInt(line.slice(params.physicalSize.length), 10);
-                        } else if (line.startsWith(params.headersSize)) {
-                            spec.headersSize = parseInt(line.slice(params.headersSize.length), 10);
-                        } else {
-                            // Parse the stdout to find entries
-                            let res = regex.exec(line);
+                    const params: Param[] = [
+                        ['Path = ', 'path', null],
+                        ['Type = ', 'type', null],
+                        ['Method = ', 'method', null],
+                        ['Physical Size = ', 'physicalSize', parseInt],
+                        ['Headers Size = ', 'headersSize', parseInt],
+                    ];       
+                    
+                    const lines = data.split('\n');
 
-                            if (res) {
-                                let e = {
-                                    date: new Date(res[1]),
-                                    attr: res[2],
-                                    size: parseInt(res[3], 10),
-                                    name: ReplaceNativeSeparator(res[5]),
-                                };
-                                entries.push(e);
-                            } // Line may be incomplete, Save it to the buffer.
-                            else buffer = line;
+                    for (const line of lines) {
+                        let lineDone = false;
+                        
+                        for (const [beginning, paramType, fn] of params) {
+                            if (line.startsWith(beginning)) {
+                                const paramValue = line.slice(beginning.length);
+                                spec[paramType] = fn ? fn(paramValue) : paramValue;
+                                lineDone = true;
+                                break;
+                            }
                         }
-                    });
+
+                        if (lineDone) continue;
+
+                        // Parse the stdout to find entries
+                        let res = regex.exec(line);
+
+                        if (res) {
+                            let e = {
+                                date: new Date(res[1]),
+                                attr: res[2],
+                                size: parseInt(res[3], 10),
+                                name: ReplaceNativeSeparator(res[5]),
+                            };
+                            entries.push(e);
+                        } // Line may be incomplete, Save it to the buffer.
+                        else buffer = line;
+                    }
+
                     return entries;
                 }
 
