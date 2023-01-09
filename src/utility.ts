@@ -156,7 +156,7 @@ export function Run(
             let res = reg.exec(data);
 
             if (res) {
-                err = new Error(res[2].substr(0, res[2].length - 1));
+                err = new Error(res[2].slice(0, -1));
                 return err;
             }
             return;
