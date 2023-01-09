@@ -284,6 +284,8 @@ export const listArchive =
                         name: string;
                     };
 
+                    // let beginningDone = false;
+
                     let entries: Entry[] = [];
 
                     if (buffer.length > 0) {
@@ -291,25 +293,27 @@ export const listArchive =
                         buffer = '';
                     }
 
+                    const params = {
+                        path: 'Path = ',
+                        type: 'Type = ',
+                        method: 'Method = ',
+                        physicalSize: 'Physical Size = ',
+                        headersSize: 'Headers Size = ',
+                    };                    
+
                     data.split('\n').forEach(function (line) {
                         // Populate the tech specs of the archive that are passed to the
                         // resolve handler.
-                        if (line.substr(0, 7) === 'Path = ') {
-                            spec.path = line.substr(7, line.length);
-                        } else if (line.substr(0, 7) === 'Type = ') {
-                            spec.type = line.substr(7, line.length);
-                        } else if (line.substr(0, 9) === 'Method = ') {
-                            spec.method = line.substr(9, line.length);
-                        } else if (line.substr(0, 16) === 'Physical Size = ') {
-                            spec.physicalSize = parseInt(
-                                line.substr(16, line.length),
-                                10
-                            );
-                        } else if (line.substr(0, 15) === 'Headers Size = ') {
-                            spec.headersSize = parseInt(
-                                line.substr(15, line.length),
-                                10
-                            );
+                        if (line.startsWith(params.path)) {
+                            spec.path = line.slice(params.path.length);
+                        } else if (line.startsWith(params.type)) {
+                            spec.type = line.slice(params.type.length);
+                        } else if (line.startsWith(params.method)) {
+                            spec.method = line.slice(params.method.length);
+                        } else if (line.startsWith(params.physicalSize)) {
+                            spec.physicalSize = parseInt(line.slice(params.physicalSize.length), 10);
+                        } else if (line.startsWith(params.headersSize)) {
+                            spec.headersSize = parseInt(line.slice(params.headersSize.length), 10);
                         } else {
                             // Parse the stdout to find entries
                             let res = regex.exec(line);
