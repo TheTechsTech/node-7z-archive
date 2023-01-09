@@ -13,8 +13,8 @@ import { isWindows } from 'node-sys';
 const onProgress = (firstChar: string) => 
     function(data: string): string[] {
         return data.split('\n')
-        .filter((line) => line.startsWith(firstChar))
-        .map((line) => ReplaceNativeSeparator(line.slice(2)));
+            .filter((line) => line.startsWith(firstChar))
+            .map((line) => ReplaceNativeSeparator(line.slice(2)));
     }
 
 function retry(
