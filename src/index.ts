@@ -5,13 +5,13 @@ import { Files, ReplaceNativeSeparator, Run } from './utility.js';
 import { createSfx } from './createSfx.js';
 import { isWindows } from 'node-sys';
 
-/**
- * When a stdout is emitted, parse each line and search for a pattern. When
- * the pattern is found, extract the file (or directory) name from it and
- * pass it to an array. Finally returns this array.
- */
 const onProgress = (firstChar: string) => 
     function(data: string): string[] {
+        /**
+         * When a stdout is emitted, parse each line and search for a pattern. When
+         * the pattern is found, extract the file (or directory) name from it and
+         * pass it to an array. Finally returns this array.
+         */
         return data.split('\n')
             .filter((line) => line.startsWith(firstChar))
             .map((line) => ReplaceNativeSeparator(line.slice(2)));
