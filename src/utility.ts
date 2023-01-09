@@ -193,11 +193,12 @@ export const Switches = function (switches: Record<string, any>) {
     switches = switches || {};
     let a = [];
     // Set default values of boolean switches
-    switches.so = switches.so === true ? true : false;
-    switches.spl = switches.spl === true ? true : false;
-    switches.ssc = switches.ssc === false ? false : true;
-    switches.ssw = switches.ssw === true ? true : false;
-    switches.y = switches.y === false ? false : true;
+    for (const key of ['so', 'spl', 'ssw']) {
+        if (switches[key] !== true) switches[key] = false;
+    }
+    for (const key of ['ssc', 'y']) {
+        if (switches[key] !== false) switches[key] = true;
+    }
 
     /*jshint forin:false*/
     for (const s in switches) {
