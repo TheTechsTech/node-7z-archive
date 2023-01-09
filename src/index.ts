@@ -72,17 +72,9 @@ export const createArchive =
                  * pass it to an array. Finally returns this array.
                  */
                 function onprogress(data: string) {
-                    let entries: string[] = [];
-                    data.split('\n').forEach(function (line) {
-                        if (line.substr(0, 1) === '+') {
-                            entries.push(
-                                ReplaceNativeSeparator(
-                                    line.substr(2, line.length)
-                                )
-                            );
-                        }
-                    });
-                    return entries;
+                    return data.split('\n')
+                        .filter((line) => line.startsWith('+'))
+                        .map((line) => ReplaceNativeSeparator(line.slice(2)));
                 }
 
                 // Convert array of files into a string if needed.
