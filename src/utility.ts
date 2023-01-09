@@ -118,38 +118,25 @@ export function Run(
         }
 
         if (switches.files) {
-            let files = switches.files;
+            const files = switches.files;
             delete switches.files;
 
-            if (Array.isArray(files)) {
-                files.forEach(function (s) {
-                    args.push(s);
-                });
-            } else {
-                args.push(files);
-            }
-
-            args.push('-r');
-            args.push('-aoa');
+            const filesArray = Array.isArray(files) ? files : [files];
+            args = [...args, ...filesArray, '-r', '-aoa'];
         }
 
         // Add switches to the `args` array.
         let switchesArray = Switches(switches);
-        switchesArray.forEach(function (s) {
-            args.push(s);
-        });
-        // Remove now double quotes. If present in the spawned process 7-Zip will
-        // read them as part of the paths (e.g.: create a `"archive.7z"` with
-        // quotes in the file-name);
-        args.forEach(function (e, i) {
-            if (!isString(e)) {
-                return;
-            }
+        args = [...args, ...switchesArray];
 
-            if (e.substr(0, 1) !== '-') {
-                e = e.replace(/^"/, '');
-                e = e.replace(/"$/, '');
-                args[i] = e;
+        // Remove double quotes. If present in the spawned process, 7-Zip will
+        // read them as part of the path (e.g.: create a `"archive.7z"` with
+        // quotes in the file-name);
+        args.forEach(function (arg, i) {
+            if (!isString(arg)) return;
+            const doubleQuotesMatch = arg.match(/^\"(.+)\"$/);
+            if (doubleQuotesMatch) {
+                args[i] = doubleQuotesMatch[1];
             }
         });
         // Add bb2 to args array so we get file info
