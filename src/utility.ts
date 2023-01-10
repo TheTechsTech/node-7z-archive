@@ -34,10 +34,22 @@ export const Binary = function (override = false, binary = '7z') {
  * @return {string}
  */
 export const Files = function (files: string | string[]): string {
-    if (isUndefined(files)) return '';
-    return (Array.isArray(files) ? files : [files])
-        .map((file) => `"${file}"`)
-        .join(' ');
+    if (isUndefined(files)) {
+        return '';
+    }
+
+    let toProcess = '';
+
+    if (Array.isArray(files)) {
+        files.forEach(function (f) {
+            toProcess += '"' + f + '" ';
+        });
+        toProcess = toProcess.trim();
+    } else {
+        toProcess = '"' + files + '"';
+    }
+
+    return toProcess;
 };
 
 /**
