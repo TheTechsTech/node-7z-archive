@@ -133,10 +133,18 @@ export function createSfx(
         reject: (err: string) => void,
         progress: (data: any) => any
     ) {
-        let directory =
-            destination != '' && fs.existsSync(destination)
-                ? destination
-                : getPath('when');
+        let directory = undefined;
+        if (destination && fs.existsSync(destination))
+            directory = destination;
+        else {
+            const whenPath = getPath('when');
+            if (whenPath) {
+                directory = whenPath;
+            } else {
+                throw new Error('Path for "when" module not found!');
+            }
+        }
+
         let SfxDirectory = join(directory, 'SfxPackages');
         fs.ensureDirSync(SfxDirectory);
         let override =
