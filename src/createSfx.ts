@@ -138,11 +138,8 @@ export function createSfx(
             directory = destination;
         else {
             const whenPath = getPath('when');
-            if (whenPath) {
-                directory = whenPath;
-            } else {
-                throw new Error('Path for "when" module not found!');
-            }
+            if (!whenPath) return reject('Path not found!');
+            directory = whenPath;
         }
 
         let SfxDirectory = join(directory, 'SfxPackages');
