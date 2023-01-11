@@ -41,11 +41,11 @@ const windowsPlatform = {
 };
 
 const windowsOtherPlatform = {
-  source: join(cwd, '7z1701.exe'),
+  source: join(cwd, '7z1604.exe'),
   destination: join(cwd, 'other32'),
-  url: 'https://d.7-zip.org/a/',
-  filename: '7z1701.exe',
-  extraName: '7z1701-extra.7z',
+  url: 'https://www.7-zip.org/a/',
+  filename: '7z1604.exe',
+  extraName: '7z1604-extra.7z',
   extractFolder: '',
   appLocation: '',
   binaryFiles: ['7z.exe', '7z.dll', '7z.sfx', '7zCon.sfx'],
@@ -53,7 +53,7 @@ const windowsOtherPlatform = {
   sfxModules: ['7za.dll', '7za.exe', '7zxa.dll'],
   platform: 'win32',
   binary: '7z.exe',
-  extraSourceFile: join(cwd, 'other32', '7z1701-extra.7z'),
+  extraSourceFile: join(cwd, 'other32', '7z1604-extra.7z'),
 };
 
 const linuxPlatform = {
