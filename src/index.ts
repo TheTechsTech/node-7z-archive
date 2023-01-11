@@ -5,6 +5,18 @@ import { Files, ReplaceNativeSeparator, Run } from './utility.js';
 import { createSfx } from './createSfx.js';
 import { isWindows } from 'node-sys';
 
+const onProgress = (firstChar: string) => 
+    function(data: string): string[] {
+        /**
+         * When a stdout is emitted, parse each line and search for a pattern. When
+         * the pattern is found, extract the file (or directory) name from it and
+         * pass it to an array. Finally returns this array.
+         */
+        return data.split('\n')
+            .filter((line) => line.startsWith(firstChar))
+            .map((line) => ReplaceNativeSeparator(line.slice(2)));
+    }
+
 function retry(
     command: string | undefined,
     options: {},
@@ -66,24 +78,7 @@ export const createArchive =
                 reject: (reason: any) => void,
                 progress: (arg0: any) => any
             ) {
-                /**
-                 * When a stdout is emitted, parse each line and search for a pattern.When
-                 * the pattern is found, extract the file (or directory) name from it and
-                 * pass it to an array. Finally returns this array.
-                 */
-                function onprogress(data: string) {
-                    let entries: string[] = [];
-                    data.split('\n').forEach(function (line) {
-                        if (line.substr(0, 1) === '+') {
-                            entries.push(
-                                ReplaceNativeSeparator(
-                                    line.substr(2, line.length)
-                                )
-                            );
-                        }
-                    });
-                    return entries;
-                }
+                const onprogress = onProgress('+');
 
                 // Convert array of files into a string if needed.
                 files = Files(files);
@@ -178,24 +173,7 @@ export const extractArchive =
                 reject: (reason: any) => void,
                 progress: (arg0: any) => any
             ) {
-                /**
-                 * When a stdout is emitted, parse each line and search for a pattern.When
-                 * the pattern is found, extract the file (or directory) name from it and
-                 * pass it to an array. Finally returns this array.
-                 */
-                function onprogress(data: string) {
-                    let entries: string[] = [];
-                    data.split('\n').forEach(function (line) {
-                        if (line.substr(0, 1) === '-') {
-                            entries.push(
-                                ReplaceNativeSeparator(
-                                    line.substr(2, line.length)
-                                )
-                            );
-                        }
-                    });
-                    return entries;
-                }
+                const onprogress = onProgress('-');
 
                 // Create a string that can be parsed by `run`.
                 let command = 'e "' + filepath + '" -o"' + dest + '" ';
@@ -241,25 +219,8 @@ export const fullArchive =
                 reject: (reason: any) => void,
                 progress: (arg0: any) => any
             ) {
-                /**
-                 * When a stdout is emitted, parse each line and search for a pattern.When
-                 * the pattern is found, extract the file (or directory) name from it and
-                 * pass it to an array. Finally returns this array.
-                 */
-                function onprogress(data: string) {
-                    let entries: string[] = [];
-                    data.split('\n').forEach(function (line) {
-                        if (line.substr(0, 1) === '-') {
-                            entries.push(
-                                ReplaceNativeSeparator(
-                                    line.substr(2, line.length)
-                                )
-                            );
-                        }
-                    });
-                    return entries;
-                }
-
+                const onprogress = onProgress('-');
+                
                 // Create a string that can be parsed by `run`.
                 let command = 'x "' + filepath + '" -o"' + dest + '" ';
                 return retry(
@@ -330,41 +291,49 @@ export const listArchive =
                         buffer = '';
                     }
 
-                    data.split('\n').forEach(function (line) {
-                        // Populate the tech specs of the archive that are passed to the
-                        // resolve handler.
-                        if (line.substr(0, 7) === 'Path = ') {
-                            spec.path = line.substr(7, line.length);
-                        } else if (line.substr(0, 7) === 'Type = ') {
-                            spec.type = line.substr(7, line.length);
-                        } else if (line.substr(0, 9) === 'Method = ') {
-                            spec.method = line.substr(9, line.length);
-                        } else if (line.substr(0, 16) === 'Physical Size = ') {
-                            spec.physicalSize = parseInt(
-                                line.substr(16, line.length),
-                                10
-                            );
-                        } else if (line.substr(0, 15) === 'Headers Size = ') {
-                            spec.headersSize = parseInt(
-                                line.substr(15, line.length),
-                                10
-                            );
-                        } else {
-                            // Parse the stdout to find entries
-                            let res = regex.exec(line);
+                    // Populate the tech specs of the archive that are passed to the 
+                    // resolve handler.        
+                    type Param = [string, string, Function | null];
 
-                            if (res) {
-                                let e = {
-                                    date: new Date(res[1]),
-                                    attr: res[2],
-                                    size: parseInt(res[3], 10),
-                                    name: ReplaceNativeSeparator(res[5]),
-                                };
-                                entries.push(e);
-                            } // Line may be incomplete, Save it to the buffer.
-                            else buffer = line;
+                    const params: Param[] = [
+                        ['Path = ', 'path', null],
+                        ['Type = ', 'type', null],
+                        ['Method = ', 'method', null],
+                        ['Physical Size = ', 'physicalSize', parseInt],
+                        ['Headers Size = ', 'headersSize', parseInt],
+                    ];       
+                    
+                    const lines = data.split('\n');
+
+                    for (const line of lines) {
+                        let lineDone = false;
+                        
+                        for (const [beginning, paramType, fn] of params) {
+                            if (line.startsWith(beginning)) {
+                                const paramValue = line.slice(beginning.length);
+                                spec[paramType] = fn ? fn(paramValue) : paramValue;
+                                lineDone = true;
+                                break;
+                            }
                         }
-                    });
+
+                        if (lineDone) continue;
+
+                        // Parse the stdout to find entries
+                        let res = regex.exec(line);
+
+                        if (res) {
+                            let e = {
+                                date: new Date(res[1]),
+                                attr: res[2],
+                                size: parseInt(res[3], 10),
+                                name: ReplaceNativeSeparator(res[5]),
+                            };
+                            entries.push(e);
+                        } // Line may be incomplete, Save it to the buffer.
+                        else buffer = line;
+                    }
+
                     return entries;
                 }
 
@@ -433,25 +402,8 @@ export const onlyArchive =
                     files: files,
                 });
 
-                /**
-                 * When a stdout is emitted, parse each line and search for a pattern.When
-                 * the pattern is found, extract the file (or directory) name from it and
-                 * pass it to an array. Finally returns this array.
-                 */
-                function onprogress(data: string) {
-                    let entries: string[] = [];
-                    data.split('\n').forEach(function (line) {
-                        if (line.substr(0, 1) === '-') {
-                            entries.push(
-                                ReplaceNativeSeparator(
-                                    line.substr(2, line.length)
-                                )
-                            );
-                        }
-                    });
-                    return entries;
-                }
-
+                const onprogress = onProgress('-');
+                
                 // Create a string that can be parsed by `run`.
                 let command = 'e "' + filepath + '" -o"' + dest + '"';
                 // Start the command
@@ -496,24 +448,7 @@ export const renameArchive =
                 reject: (reason: any) => void,
                 progress: (arg0: any) => any
             ) {
-                /**
-                 * When a stdout is emitted, parse each line and search for a pattern.When
-                 * the pattern is found, extract the file (or directory) name from it and
-                 * pass it to an array. Finally returns this array.
-                 */
-                function onprogress(data: string) {
-                    let entries: string[] = [];
-                    data.split('\n').forEach(function (line) {
-                        if (line.substr(0, 1) === 'U') {
-                            entries.push(
-                                ReplaceNativeSeparator(
-                                    line.substr(2, line.length)
-                                )
-                            );
-                        }
-                    });
-                    return entries;
-                }
+                const onprogress = onProgress('U');
 
                 // Convert array of files into a string if needed.
                 files = Files(files);
@@ -555,24 +490,7 @@ export const testArchive =
                 reject: (reason: any) => void,
                 progress: (arg0: any) => any
             ) {
-                /**
-                 * When a stdout is emitted, parse each line and search for a pattern.When
-                 * the pattern is found, extract the file (or directory) name from it and
-                 * pass it to an array. Finally returns this array.
-                 */
-                function onprogress(data: string) {
-                    let entries: string[] = [];
-                    data.split('\n').forEach(function (line) {
-                        if (line.substr(0, 1) === 'T') {
-                            entries.push(
-                                ReplaceNativeSeparator(
-                                    line.substr(2, line.length)
-                                )
-                            );
-                        }
-                    });
-                    return entries;
-                }
+                const onprogress = onProgress('T');
 
                 // Create a string that can be parsed by `run`.
                 let command = 't "' + filepath + '"';
@@ -618,24 +536,7 @@ export const updateArchive =
                 reject: (reason: any) => void,
                 progress: (arg0: any) => any
             ) {
-                /**
-                 * When a stdout is emitted, parse each line and search for a pattern.When
-                 * the pattern is found, extract the file (or directory) name from it and
-                 * pass it to an array. Finally returns this array.
-                 */
-                function onprogress(data: string) {
-                    let entries: string[] = [];
-                    data.split('\n').forEach(function (line) {
-                        if (line.substr(0, 1) === 'U') {
-                            entries.push(
-                                ReplaceNativeSeparator(
-                                    line.substr(2, line.length)
-                                )
-                            );
-                        }
-                    });
-                    return entries;
-                }
+                const onprogress = onProgress('U');
 
                 // Convert array of files into a string if needed.
                 files = Files(files);

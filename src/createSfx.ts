@@ -133,14 +133,18 @@ export function createSfx(
         reject: (err: string) => void,
         progress: (data: any) => any
     ) {
-        let directory =
-            destination != '' && fs.existsSync(destination)
-                ? destination
-                : getPath('when');
+        let directory = undefined;
+        if (destination && fs.existsSync(destination))
+            directory = destination;
+        else {
+            const whenPath = getPath('when');
+            if (!whenPath) return reject('Path not found!');
+            directory = whenPath;
+        }
+
         let SfxDirectory = join(directory, 'SfxPackages');
         fs.ensureDirSync(SfxDirectory);
-        let override =
-            isWindows() && (platform == 'linux' || platform == 'darwin');
+        const override = isWindows() && ['linux', 'darwin'].includes(platform);
         let binaryDirectory = Binary(override);
         let configFile = join(binaryDirectory.path, 'config.txt');
         //let configFile = join(SfxDirectory, 'config.txt');
@@ -166,24 +170,29 @@ export function createSfx(
         if (text) config.write('ExecuteParameters=' + text + '\n');
         config.write(';!@InstallEnd@!' + '\n');
         config.close();
-        delete options.title;
-        delete options.prompt;
-        delete options.beginPrompt;
-        delete options.progress;
-        delete options.run;
-        delete options.runProgram;
-        delete options.directory;
-        delete options.execute;
-        delete options.executeFile;
-        delete options.parameters;
-        delete options.executeParameters;
-        let sfxModule =
-            type == 'gui' ? '7zwin32.sfx' : '7zCon' + platform + '.sfx';
-        let sfx = name.includes(extension) ? name : name + extension;
-        let list = Array.isArray(files)
-            ? [configFile].concat(files)
-            : configFile + ' ' + files;
-        sfx = join(SfxDirectory, sfx);
+        [
+            'title', 
+            'prompt', 
+            'beginPrompt', 
+            'progress', 
+            'run', 
+            'runProgram', 
+            'directory', 
+            'execute', 
+            'executeFile', 
+            'parameters', 
+            'executeParameters'
+        ].forEach((name) => delete options[name]);
+        const sfxModule = type === 'gui' 
+            ? '7zwin32.sfx' 
+            : `7zCon${platform}.sfx`;
+        const sfxFilename = name.includes(extension) 
+            ? name 
+            : name + extension;
+        const sfx = join(SfxDirectory, sfxFilename);
+        let list = Array.isArray(files) 
+            ? [configFile, ...files]
+            : `${configFile} ${files}`;
         let params = Object.assign(options, {
             sfx: sfxModule,
         });
@@ -198,12 +207,10 @@ export function createSfx(
                     if (fs.existsSync(sfx)) {
                         return resolve(sfx);
                         /* c8 ignore next 4 */
-                    } else {
-                        console.error(data);
-                        return reject(
-                            'Failed! The Sfx application could not be created!'
-                        );
-                    }
+                    } 
+
+                    console.error(data);
+                    return reject('Failed! The Sfx application could not be created!');
                 });
             })
             .catch((err: string) => {

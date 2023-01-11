@@ -130,38 +130,25 @@ export function Run(
         }
 
         if (switches.files) {
-            let files = switches.files;
+            const files = switches.files;
             delete switches.files;
 
-            if (Array.isArray(files)) {
-                files.forEach(function (s) {
-                    args.push(s);
-                });
-            } else {
-                args.push(files);
-            }
-
-            args.push('-r');
-            args.push('-aoa');
+            const filesArray = Array.isArray(files) ? files : [files];
+            args = [...args, ...filesArray, '-r', '-aoa'];
         }
 
         // Add switches to the `args` array.
         let switchesArray = Switches(switches);
-        switchesArray.forEach(function (s) {
-            args.push(s);
-        });
-        // Remove now double quotes. If present in the spawned process 7-Zip will
-        // read them as part of the paths (e.g.: create a `"archive.7z"` with
-        // quotes in the file-name);
-        args.forEach(function (e, i) {
-            if (!isString(e)) {
-                return;
-            }
+        args = [...args, ...switchesArray];
 
-            if (e.substr(0, 1) !== '-') {
-                e = e.replace(/^"/, '');
-                e = e.replace(/"$/, '');
-                args[i] = e;
+        // Remove double quotes. If present in the spawned process, 7-Zip will
+        // read them as part of the path (e.g.: create a `"archive.7z"` with
+        // quotes in the file-name);
+        args.forEach(function (arg, i) {
+            if (!isString(arg)) return;
+            const doubleQuotesMatch = arg.match(/^\"(.+)\"$/);
+            if (doubleQuotesMatch) {
+                args[i] = doubleQuotesMatch[1];
             }
         });
         // Add bb2 to args array so we get file info
@@ -181,7 +168,7 @@ export function Run(
             let res = reg.exec(data);
 
             if (res) {
-                err = new Error(res[2].substr(0, res[2].length - 1));
+                err = new Error(res[2].slice(0, -1));
                 return err;
             }
             return;
@@ -216,17 +203,17 @@ export function Run(
 export const Switches = function (switches: Record<string, any>) {
     // Default value for switches
     switches = switches || {};
-    var a = [];
+    let a = [];
     // Set default values of boolean switches
-    switches.so = switches.so === true ? true : false;
-    switches.spl = switches.spl === true ? true : false;
-    switches.ssc = switches.ssc === false ? false : true;
-    switches.ssw = switches.ssw === true ? true : false;
-    switches.y = switches.y === false ? false : true;
-    var s;
+    for (const key of ['so', 'spl', 'ssw']) {
+        if (switches[key] !== true) switches[key] = false;
+    }
+    for (const key of ['ssc', 'y']) {
+        if (switches[key] !== false) switches[key] = true;
+    }
 
     /*jshint forin:false*/
-    for (s in switches) {
+    for (const s in switches) {
         // Switches that are set or not. Just add them to the array if they are
         // present. Differ the `ssc` switch treatment to later in the function.
         if (switches[s] === true && s !== 'ssc') {
@@ -237,19 +224,16 @@ export const Switches = function (switches: Record<string, any>) {
         // wrap the value with double quotes. Else just add the switch and its value
         // to the string. Doubles quotes are used for parsing with a RegExp later.
         if (!isBool(switches[s])) {
-            // Special treatment for wildcards
             if (s === 'wildcards') {
+                // Special treatment for wildcards
                 a.unshift(switches.wildcards);
-            } // Allow raw switches to be added to the command, repeating switches like
-            // -i is not possible otherwise.
-            else if (s === 'raw') {
-                switches.raw.forEach(function (rawValue: any) {
-                    a.push(rawValue);
-                });
-            } else if (switches[s].indexOf(' ') === -1) {
-                a.push('-' + s + switches[s]);
+            } else if (s === 'raw') {
+                // Allow raw switches to be added to the command, 
+                // otherwise repeating switches like -i is not possible.                
+                a = [...a, ...switches.raw];
             } else {
-                a.push('-' + s + '"' + switches[s] + '"');
+                const quote = switches[s].includes(' ') ? '"' : '';
+                a.push(`-${s}${quote}${switches[s]}${quote}`);
             }
         }
 
