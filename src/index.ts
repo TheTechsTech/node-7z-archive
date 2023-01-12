@@ -28,26 +28,16 @@ function retry(
     archive: string
 ) {
     // Start the command
-    return Run('7z', command, options, override)
-        .progress(function (data: any) {
-            return progress(onprogress(data));
-        }) // When all is done resolve the Promise.
-        .then(function (args: string[]) {
-            return resolve(args);
-        }) // Catch the error and pass it to the reject function of the Promise.
-        .catch(function () {
-            console.error(archive + ' failed using `7z`, retying with `7za`.');
-            Run('7za', command, options, override)
-                .progress(function (data: any) {
-                    return progress(onprogress(data));
-                })
-                .then(function (args: string[]) {
-                    return resolve(args);
-                })
-                .catch(function (err: any) {
-                    return reject(err);
-                });
+    let executables = ['7z', '7za']; // Two or more executables
+    const runner = () => Run(executables.shift(), command, options, override)
+        .progress((data: any) => progress(onprogress(data)))        
+        .then((args: string[]) => resolve(args)) // When all is done resolve the Promise.        
+        .catch((err: any) => { // Catch the error and pass it to the reject function of the Promise.
+            if (!executables.length) return reject(err);
+            console.error(archive + ' failed using `7z`, retrying with `7za`.');
+            runner();
         });
+    return runner();
 }
 
 /**
