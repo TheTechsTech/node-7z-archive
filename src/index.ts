@@ -28,14 +28,16 @@ function retry(
     archive: string
 ) {
     // Start the command
-    let executables = ['7z', '7za'];  
-    const runner = () => Run(executables.shift(), command, options, override)
+    const executables = ['7z', '7za']; // Two or more items
+    let position = 0;
+    const runner = () => Run(executables[position], command, options, override)
         .progress((data: any) => progress(onprogress(data)))        
         .then((args: string[]) => resolve(args)) // When all is done resolve the Promise.        
         .catch((err: any) => { // Catch the error and pass it to the reject function of the Promise.
-            if (!executables.length) return reject(err);
-            console.error(archive + ' failed using `' + executables[0] + 
-                '`, retrying with `' + executables[1] + '`.');
+            if (position === executables.length - 1) return reject(err);
+            console.error(archive + ' failed using `' + executables[position] + 
+                '`, retrying with `' + executables[position + 1] + '`.');
+            position++;
             runner();
         });
     return runner();
