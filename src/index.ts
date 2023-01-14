@@ -329,11 +329,11 @@ export const listArchive =
                 // Create a string that can be parsed by `run`.
                 let command = 'l "' + filepath + '" ';
                 // Start the command
-                const executables = ['7z', '7za'];
-                let position = isWindows() ? 0 : 1; // Windows - 2 attempts, others - 1 attempt 
+                const executables = isWindows() ? ['7z', '7za'] : ['7za'];
+                let position = 0; 
                 const runner = () => Run(executables[position], command, options, override)
                     .progress((data: string) => progress(onprogress(data)))        
-                    .then((args: any) => resolve(position === 1 && isWindows() ? args : spec))      
+                    .then((args: any) => resolve(position === 0 ? spec : args))      
                     .catch((err: any) => {
                         if (position === executables.length - 1) return reject(err);
                         console.error('ListArchive failed using `' + executables[position] + 
