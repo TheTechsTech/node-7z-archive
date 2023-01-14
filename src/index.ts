@@ -328,32 +328,20 @@ export const listArchive =
 
                 // Create a string that can be parsed by `run`.
                 let command = 'l "' + filepath + '" ';
-                Run(isWindows() ? '7z' : '7za', command, options, override)
-                    .progress(function (data: string) {
-                        return progress(onprogress(data));
-                    })
-                    .then(function () {
-                        return resolve(spec);
-                    })
-                    .catch(function (err: any) {
-                        if (isWindows()) {
-                            console.error(
-                                'ListArchive failed using `7z`, retying with `7za`.'
-                            );
-                            Run('7za', command, options, override)
-                                .progress(function (data: string) {
-                                    return progress(onprogress(data));
-                                })
-                                .then(function (args: any) {
-                                    return resolve(args);
-                                })
-                                .catch(function (err: any) {
-                                    return reject(err);
-                                });
-                        } else {
-                            return reject(err);
-                        }
+                // Start the command
+                const executables = ['7z', '7za'];
+                let position = isWindows() ? 0 : 1; // Windows - 2 attempts, others - 1 attempt 
+                const runner = () => Run(executables[position], command, options, override)
+                    .progress((data: string) => progress(onprogress(data)))        
+                    .then((args: any) => resolve(position === 1 && isWindows() ? args : spec))      
+                    .catch((err: any) => {
+                        if (position === executables.length - 1) return reject(err);
+                        console.error('ListArchive failed using `' + executables[position] + 
+                            '`, retrying with `' + executables[position + 1] + '`.');
+                        position++;
+                        runner();
                     });
+                return runner();
             });
         });
 
