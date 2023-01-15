@@ -86,15 +86,9 @@ export function Run(
         let args = [command.split(' ')[0]];
         // Parse and add command (non-switches parameters) to `args`.
         let regexpCommands = /"((?:\\.|[^"\\])*)"/g;
-        let commands = command.match(regexpCommands);
-
-        if (commands) {
-            commands.forEach(function (c) {
-                c = c.replace(/\//g, sep);
-                c = c.replace(/\\/g, sep);
-                c = normalize(c);
-                args.push(c);
-            });
+        let commands = command.match(regexpCommands) || [];
+        for (command of commands) {
+            args.push(normalize(command.replace(/(\/|\\)/g, sep)));
         }
 
         // Special treatment for the output switch because it is exposed as a
