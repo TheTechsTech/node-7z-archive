@@ -98,12 +98,12 @@ export function Run(
 
         if (output) {
             args.pop();
-            let o = output[0];
-            o = o.replace(/\//g, sep);
-            o = o.replace(/\\/g, sep);
-            o = o.replace(/"/g, '');
-            o = normalize(o);
-            args.push(o);
+            args.push(
+                normalize(output[0].replace(
+                    /(\/|\\|")/g, 
+                    (match) => match === '"' ? '' : sep)
+                )
+            );
         }
 
         if (switches.files) {
