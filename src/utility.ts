@@ -40,14 +40,7 @@ export const Files = function (files: string | string[]): string {
  * @return {string} A path with / for directory separator.
  */
 export const ReplaceNativeSeparator = function (path: string): string {
-    let result = path,
-        next;
-
-    while ((next = result.replace(nativeSeparator, '/')) !== result) {
-        result = next;
-    }
-
-    return result;
+    return path.replace(new RegExp(`\\${nativeSeparator}`, 'g'), '/');
 };
 
 /**
@@ -64,7 +57,7 @@ export const ReplaceNativeSeparator = function (path: string): string {
  */
 export function Run(
     binary: string = '7z',
-    command: string | null = null,
+     command: string | null = null,
     switches: { files?: string[] } = {},
     override: boolean = false
 ) {
