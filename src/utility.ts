@@ -57,7 +57,7 @@ export const ReplaceNativeSeparator = function (path: string): string {
  */
 export function Run(
     binary: string = '7z',
-    command: string | null = null,
+     command: string | null = null,
     switches: { files?: string[] } = {},
     override: boolean = false
 ) {
