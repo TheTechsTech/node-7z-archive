@@ -28,26 +28,19 @@ function retry(
     archive: string
 ) {
     // Start the command
-    return Run('7z', command, options, override)
-        .progress(function (data: any) {
-            return progress(onprogress(data));
-        }) // When all is done resolve the Promise.
-        .then(function (args: string[]) {
-            return resolve(args);
-        }) // Catch the error and pass it to the reject function of the Promise.
-        .catch(function () {
-            console.error(archive + ' failed using `7z`, retying with `7za`.');
-            Run('7za', command, options, override)
-                .progress(function (data: any) {
-                    return progress(onprogress(data));
-                })
-                .then(function (args: string[]) {
-                    return resolve(args);
-                })
-                .catch(function (err: any) {
-                    return reject(err);
-                });
+    const executables = ['7z', '7za']; // Two or more items
+    let position = 0;
+    const runner = () => Run(executables[position], command, options, override)
+        .progress((data: any) => progress(onprogress(data)))        
+        .then((args: string[]) => resolve(args)) // When all is done resolve the Promise.        
+        .catch((err: any) => { // Catch the error and pass it to the reject function of the Promise.
+            if (position === executables.length - 1) return reject(err);
+            console.error(archive + ' failed using `' + executables[position] + 
+                '`, retrying with `' + executables[position + 1] + '`.');
+            position++;
+            runner();
         });
+    return runner();
 }
 
 /**
@@ -124,24 +117,20 @@ export const deleteArchive =
                 // Convert array of files into a string if needed.
                 files = Files(files);
                 // Create a string that can be parsed by `run`.
-                let command = 'd "' + filepath + '" ' + files;
+                let command = `d "${filepath}" ${files}`;
                 // Start the command
-                Run('7z', command, options, override) // When all is done resolve the Promise.
-                    .then(function (args) {
-                        return resolve(args);
-                    }) // Catch the error and pass it to the reject function of the Promise.
-                    .catch(function () {
-                        console.error(
-                            'DeleteArchive failed using `7z`, retying with `7za`.'
-                        );
-                        Run('7za', command, options, override)
-                            .then(function (args) {
-                                return resolve(args);
-                            })
-                            .catch(function (err) {
-                                return reject(err);
-                            });
+                const executables = ['7z', '7za']; // Two or more items
+                let position = 0;
+                const runner = () => Run(executables[position], command, options, override)
+                    .then((args: any[]) => resolve(args)) // When all is done resolve the Promise.        
+                    .catch((err: any) => { // Catch the error and pass it to the reject function of the Promise.
+                        if (position === executables.length - 1) return reject(err);
+                        console.error('DeleteArchive failed using `' + executables[position] + 
+                            '`, retrying with `' + executables[position + 1] + '`.');
+                        position++;
+                        runner();
                     });
+                return runner();
             });
         });
 
@@ -339,32 +328,20 @@ export const listArchive =
 
                 // Create a string that can be parsed by `run`.
                 let command = 'l "' + filepath + '" ';
-                Run(isWindows() ? '7z' : '7za', command, options, override)
-                    .progress(function (data: string) {
-                        return progress(onprogress(data));
-                    })
-                    .then(function () {
-                        return resolve(spec);
-                    })
-                    .catch(function (err: any) {
-                        if (isWindows()) {
-                            console.error(
-                                'ListArchive failed using `7z`, retying with `7za`.'
-                            );
-                            Run('7za', command, options, override)
-                                .progress(function (data: string) {
-                                    return progress(onprogress(data));
-                                })
-                                .then(function (args: any) {
-                                    return resolve(args);
-                                })
-                                .catch(function (err: any) {
-                                    return reject(err);
-                                });
-                        } else {
-                            return reject(err);
-                        }
+                // Start the command
+                const executables = isWindows() ? ['7z', '7za'] : ['7za'];
+                let position = 0; 
+                const runner = () => Run(executables[position], command, options, override)
+                    .progress((data: string) => progress(onprogress(data)))        
+                    .then((args: any) => resolve(position === 0 ? spec : args))      
+                    .catch((err: any) => {
+                        if (position === executables.length - 1) return reject(err);
+                        console.error('ListArchive failed using `' + executables[position] + 
+                            '`, retrying with `' + executables[position + 1] + '`.');
+                        position++;
+                        runner();
                     });
+                return runner();
             });
         });
 

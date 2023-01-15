@@ -45,5 +45,8 @@ binaries
 # VS Code
 .vs/
 .vscode/
-win32/
 .nyc_output/
+
+# 7-Zip
+win32/
+other32/

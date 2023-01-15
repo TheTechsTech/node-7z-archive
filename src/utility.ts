@@ -11,20 +11,15 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export const Binary = function (override = false, binary = '7z') {
-    let path = join(
+    const path = join(
         __dirname,
         '..',
         'binaries',
-        override === true
-            ? process.platform + sep + 'other32'
-            : process.platform
+        `${process.platform}${override === true ? sep + 'other32' : ''}`
     );
-    let filename = isWindows() ? binary + '.exe' : binary;
-    return {
-        path: path,
-        filename: filename,
-        filepath: join(path, filename),
-    };
+    const filename = `${binary}${isWindows() ? '.exe' : ''}`;
+    const filepath = join(path, filename);
+    return { path, filename, filepath };
 };
 
 /**
@@ -34,22 +29,10 @@ export const Binary = function (override = false, binary = '7z') {
  * @return {string}
  */
 export const Files = function (files: string | string[]): string {
-    if (isUndefined(files)) {
-        return '';
-    }
-
-    let toProcess = '';
-
-    if (Array.isArray(files)) {
-        files.forEach(function (f) {
-            toProcess += '"' + f + '" ';
-        });
-        toProcess = toProcess.trim();
-    } else {
-        toProcess = '"' + files + '"';
-    }
-
-    return toProcess;
+    if (isUndefined(files)) return '';
+    return (Array.isArray(files) ? files : [files])
+        .map((file) => `"${file}"`)
+        .join(' ');
 };
 
 /**
@@ -57,14 +40,7 @@ export const Files = function (files: string | string[]): string {
  * @return {string} A path with / for directory separator.
  */
 export const ReplaceNativeSeparator = function (path: string): string {
-    let result = path,
-        next;
-
-    while ((next = result.replace(nativeSeparator, '/')) !== result) {
-        result = next;
-    }
-
-    return result;
+    return path.replace(new RegExp(`\\${nativeSeparator}`, 'g'), '/');
 };
 
 /**
@@ -103,15 +79,10 @@ export function Run(
         let args = [command.split(' ')[0]];
         // Parse and add command (non-switches parameters) to `args`.
         let regexpCommands = /"((?:\\.|[^"\\])*)"/g;
-        let commands = command.match(regexpCommands);
-
-        if (commands) {
-            commands.forEach(function (c) {
-                c = c.replace(/\//g, sep);
-                c = c.replace(/\\/g, sep);
-                c = normalize(c);
-                args.push(c);
-            });
+        let commands = command.match(regexpCommands) || [];
+        for (command of commands) {
+            const arg = command.replace(/(\/|\\)/g, sep);
+            args.push(normalize(arg));
         }
 
         // Special treatment for the output switch because it is exposed as a
@@ -121,12 +92,8 @@ export function Run(
 
         if (output) {
             args.pop();
-            let o = output[0];
-            o = o.replace(/\//g, sep);
-            o = o.replace(/\\/g, sep);
-            o = o.replace(/"/g, '');
-            o = normalize(o);
-            args.push(o);
+            const arg = output[0].replace(/(\/|\\|")/g, (match) => match === '"' ? '' : sep);
+            args.push(normalize(arg));
         }
 
         if (switches.files) {
