@@ -11,20 +11,15 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export const Binary = function (override = false, binary = '7z') {
-    let path = join(
+    const path = join(
         __dirname,
         '..',
         'binaries',
-        override === true
-            ? process.platform + sep + 'other32'
-            : process.platform
+        `${process.platform}${override === true ? sep + 'other32' : ''}`
     );
-    let filename = isWindows() ? binary + '.exe' : binary;
-    return {
-        path: path,
-        filename: filename,
-        filepath: join(path, filename),
-    };
+    const filename = `${binary}${isWindows() ? '.exe' : ''}`;
+    const filepath = join(path, filename);
+    return { path, filename, filepath };
 };
 
 /**
