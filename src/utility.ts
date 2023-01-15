@@ -88,7 +88,8 @@ export function Run(
         let regexpCommands = /"((?:\\.|[^"\\])*)"/g;
         let commands = command.match(regexpCommands) || [];
         for (command of commands) {
-            args.push(normalize(command.replace(/(\/|\\)/g, sep)));
+            const arg = command.replace(/(\/|\\)/g, sep);
+            args.push(normalize(arg));
         }
 
         // Special treatment for the output switch because it is exposed as a
@@ -98,12 +99,8 @@ export function Run(
 
         if (output) {
             args.pop();
-            args.push(
-                normalize(output[0].replace(
-                    /(\/|\\|")/g, 
-                    (match) => match === '"' ? '' : sep)
-                )
-            );
+            const arg = output[0].replace(/(\/|\\|")/g, (match) => match === '"' ? '' : sep);
+            args.push(normalize(arg));
         }
 
         if (switches.files) {
