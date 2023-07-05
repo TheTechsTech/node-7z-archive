@@ -80,7 +80,7 @@ export function Run(
         // Parse and add command (non-switches parameters) to `args`.
         let regexpCommands = /"((?:\\.|[^"\\])*)"/g;
         let commands = command.match(regexpCommands) || [];
-        for (command of commands) {
+        for (let command of commands) {
             const arg = command.replace(/(\/|\\)/g, sep);
             args.push(normalize(arg));
         }
