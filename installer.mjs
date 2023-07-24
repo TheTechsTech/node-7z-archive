@@ -61,7 +61,7 @@ const linuxPlatform = {
   destination: join(cwd, 'linux'),
   url: 'https://github.com/techno-express/p7zip/releases/download/17.02/',
   filename: 'linux-p7zip.7z',
-  extraName: 'lzma1701.7z',
+  extraName: 'lzma1604.7z',
   extractFolder: '',
   appLocation: '',
   binaryFiles: ['7z', '7z.so', '7za', '7zCon.sfx', '7zr', 'Codecs'],
@@ -69,7 +69,7 @@ const linuxPlatform = {
   sfxModules: null,
   platform: 'linux',
   binary: '7z',
-  extraSourceFile: join(cwd, 'linux', 'lzma1701.7z'),
+  extraSourceFile: join(cwd, 'linux', 'lzma1604.7z'),
 };
 
 const appleMacPlatform = {
@@ -77,7 +77,7 @@ const appleMacPlatform = {
   destination: join(cwd, 'darwin'),
   url: 'https://github.com/techno-express/p7zip/releases/download/17.02/',
   filename: 'macos-p7zip.7z',
-  extraName: 'lzma1701.7z',
+  extraName: 'lzma1604.7z',
   extractFolder: '',
   appLocation: '',
   binaryFiles: ['7z', '7z.so', '7za', '7zCon.sfx', '7zr', 'Codecs'],
@@ -85,7 +85,7 @@ const appleMacPlatform = {
   sfxModules: null,
   platform: 'darwin',
   binary: '7z',
-  extraSourceFile: join(cwd, 'darwin', 'lzma1701.7z'),
+  extraSourceFile: join(cwd, 'darwin', 'lzma1604.7z'),
 };
 
 function retrieve(path = {
