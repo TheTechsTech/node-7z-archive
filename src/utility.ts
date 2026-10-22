@@ -87,13 +87,12 @@ export function Run(
 
         // Special treatment for the output switch because it is exposed as a
         // parameter in the API and not as a option. Plus wildcards can be passed.
-        let regexpOutput = /-o"((?:\\.|[^"\\])*)"/g;
-        let output = command.match(regexpOutput);
+        let regexpOutput = /-o"((?:\\.|[^"\\])*?)"/g;
+        let output = Array.from(command.matchAll(regexpOutput))[0];
 
         if (output) {
             args.pop();
-            const arg = output[0].replace(/(\/|\\|")/g, (match) => match === '"' ? '' : sep);
-            args.push(normalize(arg));
+            args.push(`-o${normalize(output[1])}`);
         }
 
         if (switches.files) {
