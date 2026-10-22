@@ -97,10 +97,12 @@ export function Run(
 
         if (switches.files) {
             const files = switches.files;
-            delete switches.files;
-
             const filesArray = Array.isArray(files) ? files : [files];
             args = [...args, ...filesArray, '-r', '-aoa'];
+        }
+
+        if (switches.hasOwnProperty("files")){
+            delete switches.files;
         }
 
         // Add switches to the `args` array.
