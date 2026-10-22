@@ -78,8 +78,8 @@ export function Run(
         let cmd = sevenBinary.filepath;
         let args = [command.split(' ')[0]];
         // Parse and add command (non-switches parameters) to `args`.
-        let regexpCommands = /"((?:\\.|[^"\\])*)"/g;
-        let commands = command.match(regexpCommands) || [];
+        let regexpCommands = /"((?:\\.|[^"\\])*?)"/g;
+        let commands = command.matchAll(regexpCommands).map((a)=>a[1]);
         for (let command of commands) {
             const arg = command.replace(/(\/|\\)/g, sep);
             args.push(normalize(arg));
@@ -87,21 +87,22 @@ export function Run(
 
         // Special treatment for the output switch because it is exposed as a
         // parameter in the API and not as a option. Plus wildcards can be passed.
-        let regexpOutput = /-o"((?:\\.|[^"\\])*)"/g;
-        let output = command.match(regexpOutput);
+        let regexpOutput = /-o"((?:\\.|[^"\\])*?)"/g;
+        let output = Array.from(command.matchAll(regexpOutput))[0];
 
         if (output) {
             args.pop();
-            const arg = output[0].replace(/(\/|\\|")/g, (match) => match === '"' ? '' : sep);
-            args.push(normalize(arg));
+            args.push(`-o${normalize(output[1])}`);
         }
 
         if (switches.files) {
             const files = switches.files;
-            delete switches.files;
-
             const filesArray = Array.isArray(files) ? files : [files];
             args = [...args, ...filesArray, '-r', '-aoa'];
+        }
+
+        if (switches.hasOwnProperty("files")){
+            delete switches.files;
         }
 
         // Add switches to the `args` array.
