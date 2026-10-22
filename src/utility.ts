@@ -78,8 +78,8 @@ export function Run(
         let cmd = sevenBinary.filepath;
         let args = [command.split(' ')[0]];
         // Parse and add command (non-switches parameters) to `args`.
-        let regexpCommands = /"((?:\\.|[^"\\])*)"/g;
-        let commands = command.match(regexpCommands) || [];
+        let regexpCommands = /"((?:\\.|[^"\\])*?)"/g;
+        let commands = command.matchAll(regexpCommands).map((a)=>a[1]);
         for (let command of commands) {
             const arg = command.replace(/(\/|\\)/g, sep);
             args.push(normalize(arg));
